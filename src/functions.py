@@ -5,24 +5,14 @@ import line
 import segment
 import ray
 import circle
+from graphics import *
 
+win = GraphWin("My windows", 500, 500)
 
-def getRandPoint():
-    T = point.Point(1, 2)
-    T.x = random.randint(100, 500)
-    T.y = random.randint(100, 500)
-    return T
-
-def getRandSegment():
-    A = getRandPoint()
-    B = getRandPoint()
-    T = segment.Segment(A, B)    
-    return T
-
-def getMiddlePoint(A, B):
-    M = point.Point((A.x + B.x) / 2, (A.y + B.y) / 2)
-    return M
-
-def getMiddleSeg(S):
-    return getMiddlePoint(S.A, S.B)
-
+for i in range(10):
+    a = point.rand()
+    b = point.rand()
+    print(a)
+    print(b)
+    line = Line(Point(a.x, a.y), Point(b.x, b.y))
+    line.draw(win)

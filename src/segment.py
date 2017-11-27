@@ -4,10 +4,13 @@ import point
 
 class Segment(object):
 
-    def __init__(self, A, B):
-        self.A = A
-        self.B = B
-
+    def __init__(self, begin, end):
+        self.begin = begin
+        self.end = end
     def __str__(self):
-        return self.A.__str__() + '--' + self.B.__str__()
-        
+        return "(" + str(self.begin) + ", " + str(self.end) + ")"
+       
+def rand():
+	a = point.rand()
+	b = point.rand()
+	return Segment(a, b)
