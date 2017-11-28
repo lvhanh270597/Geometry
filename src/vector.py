@@ -17,3 +17,10 @@ def rand(s = 1, t = 10):
 		b = random.randint(s, t)
 	return Vector(a, b)
 	
+# trả về vector chỉ phương của đường thẳng
+def directVector_1(line):
+    	return Vector(b, -a)
+
+# trả về vector chỉ phương của đoạn thẳng
+def directVector_2(segment)
+	return Vector(end.x-begin.x, (end.y-begin.y))
