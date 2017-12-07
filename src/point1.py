@@ -4,21 +4,14 @@ from line import *
 from circle import *
 from angle import *
 from vector import *
-import mathfunctions
-import graphics
-
 class Point(object):
     def __init__(self, x, y):
         self.x = x
-        self.y = y
-    def draw(self, win, color='black'):
-        p = graphics.Point(self.x + 250, self.y + 250)
-        p.setOutline(color)
-        p.draw(win)
+        self.y = y        
     def __str__(self):
         return "(" + str(self.x) + "; " + str(self.y) + ")"
 	
-def rand(a=-250, b=250):
+def rand(a=100, b=500):
     x = random.randint(a, b)
     y = random.randint(a, b)
     return Point(x, y)
@@ -38,8 +31,14 @@ def insideAngle(angle):
     
 # return a point which is on a line 
 def onLine(line):
-    x = random.randint(-250, 250)
-    return Point(x, mathfunctions.getY(line, x))
+    x = random.randint(0,2)
+    y = 0
+    if line.b != 0:
+        y = (line.a * x + line.c)/(-line.b)
+    else:
+        y = 0
+        x = -c/a    
+    return Point(x, y)
 
 # return a point which is the center of a segment
 def center(segment):
@@ -66,19 +65,26 @@ def combine_2(point, line):
     return onLine(Line(a, b, c))    
 # return a point whose segment with another is equal d
 def combine_3(point, distance):
-    x = random.randint(point.x - distance, point.x)
+    x = random.randint(point.x -distance,point.x +distance)
+    while x== point.x:
+        x = random.randint(point.x-distance,point.x+distance)
     k = distance**2 - (point.x - x)**2
-    c = random.choice([-1, 1])    
-    y = point.y + c * math.sqrt(k)    
-    return Point(x,y)
+    if(point.y<0):
+        y =-( -point.y - math.sqrt(k))
+    else:
+        y = point.y - math.sqrt(k)
+    a = Point(x,y)
+    return a
     
 # return a point which is intersection between two lines
 def intersection(line1, line2):
     D = line1.a*line2.b - line2.a*line1.b
-    Dx = -line1.c * line2.b - line1.b*-line2.c
-    Dy = line1.a * (-line2.c) - line2.a*-line1.c
-    if D == 0: return onLine(line1)
-    return Point(Dx/D, Dy/D)
+    Dx = -line1.c*line2.b - line1.b*-line2.c
+    Dy = line1.a*-line2.c - line2.a*-line1.c
+    if D==0:
+        a = onLine(line1)
+        return a
+    return Point(Dx/D,Dy/D)
 #return a point which will be combined with the others to create a triangle
 def combine_triangle(point1, point2):
     a = point1.y - point2.y
@@ -143,6 +149,13 @@ def combine_rectangle(point1, point2, point3):
 # return a list of point which is the intersection of two circles
 def intersect_two_circles(circle1, circle2):
     d = math.sqrt((circle1.O.x-circle2.O.x)**2 + (circle1.O.y-circle2.O.y)**2)
+    if( d > circle1.R + circle2.R) or d < abs(circle1.R-circle2.R):
+        return "Cannot find point"
+    if d == 0 and circle1.R == circle2.R:
+        x = combine_3(circle1.O,cirle1.R)
+        y = combine_3(circle1.O,cirle1.R)
+        while y == x:
+            y = combine_3(circle1.O,cirle1.R)
     a = ( circle1.R**2 - circle2.R**2 + d**2)/(2*d)
     h = math.sqrt(((circle1.R)**2 - a**2))
     px = circle1.O.x + a*(circle2.O.x - circle1.O.x)/d
@@ -151,4 +164,3 @@ def intersect_two_circles(circle1, circle2):
     y = Point(px - h*(circle2.O.y - circle1.O.y)/d,py + h*(circle2.O.x - circle1.O.x)/d)
     list = [Point(x.x,x.y),Point(y.x,y.y)];
     return list
-
