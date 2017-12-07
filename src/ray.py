@@ -44,4 +44,4 @@ def combine_1_segment(segment):
 	s1 = center(segment)
 	r1 = Ray(s1, v1)
 	r2 = combine_1_ray(r1)
-	return r2
+	return r2    	
