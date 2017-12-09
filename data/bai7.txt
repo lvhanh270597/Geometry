@@ -1,0 +1,12 @@
+variables 	= 	A 	B 	C 	BM 	CN 	M 	N	D	E	ABC
+display		=	1	1	1	1	1	1	1	1	1	1
+A = point rand
+B = point rand
+C = point rand
+ABC = triangle Triangle A B C
+BM = segment Segment B M
+CN = segment Segment C N
+M = point center A C
+N = point center A B
+D = point pos_point B M
+E = point pos_point C N

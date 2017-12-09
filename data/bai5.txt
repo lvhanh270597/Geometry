@@ -1,0 +1,13 @@
+variables	=	O 	x 	Ox	y	Oy	xOy		A 	B	d1	d2	C
+display		=	1	0	1	0	1 	0		1	1	0	0	1
+O = point rand
+x = vector rand
+y = vector rand
+Ox = ray Ray O x
+Oy = ray Ray O y
+xOy = angle Angle Ox Oy
+A = point insideAngle xOy
+d1 = line convertRay Ox
+B = point pos_line A d1
+d2 = line convertRay Oy
+C = point pos_line A d2

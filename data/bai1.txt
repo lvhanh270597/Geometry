@@ -1,0 +1,17 @@
+variables 	= TGABC	A 	B 	C 	C1 	M 	MB 	D 	BC 	E 	d 	AB 	AC 	d2 	F
+display 	= 1 	1 	1 	1 	0 	0 	0 	1 	0 	1 	0 	0 	0 	0	1
+TGABC = triangle Triangle A B C
+A = point onCircle C1
+C1 = circle Circle M MB
+MB = mathfunctions distance M B
+M = point center B C
+B = point rand
+C = point rand
+D = point onSegment BC
+BC = segment Segment B C
+E = point pos_line D d
+d = line convertSegment AB
+AB = segment Segment A B
+F = point pos_line D d2
+d2 = line convertSegment AC
+AC = segment Segment A C
