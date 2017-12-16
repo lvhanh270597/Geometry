@@ -12,7 +12,7 @@ import fourangle
 import vector
 import mathfunctions
 from RULE import *
-
+import template
 
 functions = {
     'point.rand'                    : point.rand,    
@@ -60,105 +60,9 @@ functions = {
     'ray.Ray'                       : ray.Ray
 }
 
-class rule(object):
-    def __init__(self, S):
-        v = S.split()
-        self.Name = v[0]
-        self.Type = v[2]
-        self.Func = v[3]
-        for i in range(4, len(v)):
-            if v[i].isdigit():
-                v[i] = float(v[i])
-        self.Depend = v[4:]
-        self.docs = S
-    def __str__(self):
-        return self.docs
-
-def draw(value, display):
-    line.Line([1, 0, 0]).draw()
-    line.Line([0, 1, 0]).draw()
-
-    for key in value.keys():
-        obj = value[key]
-        print(key)
-        #print(obj)
-        # draw text in point
-        '''if len(key) == 1 and display[key] == '1':
-            p = graphics.Point(obj.dx , obj.dy - 10)
-            '''
-        #######################################
-        if display[key] == '1':
-            obj.draw(key)
-    
-def readKnowledge(fileKnowledge):
-    f = open(fileKnowledge, 'r')
-    V = f.readline().split()
-    V = V[2 : ]
-
-    mtp = f.readline().split()
-    mtp = mtp[2 : ]
-    display = {}
-    for i in range(len(mtp)):
-        display[V[i]] = mtp[i]
-    
-    rules = []
-    for line in f:
-        rules += [rule(line)]
-    return (V, rules, display)
-
-def init(V):
-    active = {}
-    value = {}
-    for v in V:
-        active[v] = False
-        value[v] = None
-    return (active, value)
-
-def isNumber(x):
-    return str(x).count('.') > 0
-
-def canSolve(r, active):
-    for depend in r.Depend:
-        # check for a number
-        if isNumber(depend): continue
-        if not active[depend]:
-            return False
-    return True
-
-def solve(value, r):
-    L = []
-    for depend in r.Depend:
-        # check for a number
-        if isNumber(depend):
-            L += [depend]
-        else:
-            L += [value[depend]]
-    return functions[r.Type + '.' + r.Func](L)
-        
-
-def main():    
-    (V, rules, display) = readKnowledge('../data/bai7.txt')
-    (active, value) = init(V)
-    
-    stop = False
-    while not stop:
-        stop = True        
-        for r in rules:
-            if not active[r.Name]:
-                if canSolve(r, active):                    
-                    active[r.Name] = True
-                    value[r.Name] = solve(value, r)
-                    stop = False
-
-    draw(value, display)
+def main():
     
 main()
-
-
-
-
-
-
 
 
 

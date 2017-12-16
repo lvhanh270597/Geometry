@@ -5,16 +5,19 @@ import graphics
 from RULE import *
 
 class Circle(object):
-    def __init__(self, L):
-        O = L[0]
-        R = L[1]
-        self.O = O
-        self.R = R
-    def draw(self, color='black'):
+    def __init__(self, L):        
+        self.O = L[0]
+        self.R = L[1]
+        self.drawn = False
+        self.name = 'unknown'
+        if len(L) > 2: self.name = L[2]
+    def draw(self):
+        if self.drawn: return
         p = graphics.Point(self.O.dx, self.O.dy)
-        c = graphics.Circle(p, self.R * ratio)
-        c.setOutline(color)
-        c.draw(win)
+        C = graphics.Circle(p, self.R * ratio)
+        C.draw(win)
+        self.O.draw()
+        self.drawn = True
     def __str__(self):
     	return "(" + str(self.O) + ", " + str(self.R) + ")"
 

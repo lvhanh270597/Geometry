@@ -10,19 +10,23 @@ import graphics
 from RULE import *
 
 class Point(object):
-    def __init__(self, L):
-        x = L[0]
-        y = L[1]
-        self.x = x
-        self.y = y
-        self.dx = Ox + x * ratio
-        self.dy = Oy - y * ratio 
-    def draw(self, name='none', color='black', arrow='none'):
-        p = graphics.Point(self.dx, self.dy)
-        p.setOutline(color)
-        label = graphics.Text(graphics.Point(self.dx + 10, self.dy + 10), name)
+    def __init__(self, L):        
+        self.name = 'unknown'
+        if len(L) > 2:
+            self.name = L[2]
+        self.x = L[0]
+        self.y = L[1]
+        self.dx = Ox + self.x * ratio
+        self.dy = Oy - self.y * ratio
+        self.drawn = False
+    def draw(self):
+        if self.drawn: return
+        p = graphics.Point(self.dx, self.dy)        
+        label = graphics.Text(graphics.Point(self.dx + 10, self.dy + 10),
+                              self.name)
         label.draw(win)
         p.draw(win)
+        self.drawn = True
     def __str__(self):
         return "(" + str(self.x) + "; " + str(self.y) + ")"
 	
@@ -48,28 +52,11 @@ def insideTriangle(L):
     B = triangle.B
     C = triangle.C
 
-    seg = segment.Segment([B, C])
-    BC = line.convertSegment([seg])
-    d = mathfunctions.distance_line([A, BC])
-
-    R = random.random() * d
-    O = A
-
-    v1 = vector.make_from_two_points(A, B)
-    v2 = vector.make_from_two_points(A, C)
-    
-    cosBAC = mathfunctions.cos_between_two_vector(v1, v2)
-
-    while True:
-        alpha = random.randint(1, 360)
-        x = O.x + R * math.cos(mathfunctions.degToRad(alpha))
-        y = O.y + R * math.sin(mathfunctions.degToRad(alpha))
-        M = Point([x, y])
-        v = vector.make_from_two_points(A, M)
-        cos1 = mathfunctions.cos_between_two_vector(v1, v)
-        cos2 = mathfunctions.cos_between_two_vector(v2, v)
-        if cos1 > cosBAC and cos2 > cosBAC:
-            return M
+    M = onSegment([segment.Segment([B, C])])
+    v = vector.make_from_two_points(A, M)
+    r = random.random()
+    M = Point([M.x - r * v.a, M.y - r * v.b])
+    return M
         
     
 def insideAngle(L):
@@ -91,12 +78,63 @@ def insideAngle(L):
     B = Point([x1, y1])
     C = Point([x2, y2])    
     return insideTriangle([triangle.Triangle([A, B, C])])
+
+def outsideTriangle(L):
+    triangle = L[0]
+    A = triangle.A
+    B = triangle.B
+    C = triangle.C
+
+    M = onSegment([segment.Segment([B, C])])
+    v = vector.make_from_two_points(A, M)
+    r = random.random()
+    M = Point([M.x + r * v.a, M.y + r * v.b])
+    return M
+
+def insideAngle2(L):
+    angle = L[0]
+    O = angle.v1.start
+    v1 = angle.v1.v
+    v2 = angle.v2.v
+
+    size1 = vector.size(v1)
+    size2 = vector.size(v2)
+    d1 = 10 / size1
+    d2 = 10 / size2        
+    x1 = O.x + d1 * v1.a
+    y1 = O.y + d1 * v1.b
+    t = random.randint(1, 10)
+    x2 = O.x + d2 * v2.a
+    y2 = O.y + d2 * v2.b
+    A = O
+    B = Point([x1, y1])
+    C = Point([x2, y2])    
+    return outsideTriangle([triangle.Triangle([A, B, C])])
     
-# return a point which is on a line 
+# return a point which is on a line
+# sao cho, diem do luon nam trong man hinh
 def onLine(L):
     line = L[0]
-    x = random.randint(-10, 10)
-    return Point([x, mathfunctions.getY(line, x)])
+    a = line.a
+    b = line.b
+    c = line.c
+    if a == 0: return Point([0, mathfunctions.getY(line, 0)])
+    if b == 0: return Point([mathfunctions.getX(line, 0), 0])
+    Left = (-5 * b - c) / a
+    Right = (5 * b - c) / a
+    if Left > Right:
+        t = Left
+        Left = Right
+        Right = t
+    x = 0
+    if Left > 0:
+        x = Left                
+    if Right < 0:
+        x = Right        
+
+    M = Point([x, mathfunctions.getY(line, x)])
+    return M
+    
 def onSegment(L):
     seg = L[0]
     u = vector.directVector_2([seg])
@@ -163,7 +201,7 @@ def combine_2(L):
 def combine_3(L):
     point = L[0]
     distance = L[1]
-    x = random.randint(point.x - distance, point.x)
+    x = point.x + distance * random.random()
     k = distance**2 - (point.x - x)**2
     c = random.choice([-1, 1])    
     y = point.y + c * math.sqrt(k)    
@@ -314,7 +352,7 @@ def intersect_two_circles(L):
     C1 = L[0]
     C2 = L[1]
 
-    d1 = mathfunctions.distance(C1.O, C2.O)
+    d1 = mathfunctions.distance([C1.O, C2.O])
     d2 = C1.R + C2.R
     if d1 > d2: return []
     a = (C1.R ** 2 - C2.R ** 2 + d1 * d1) / (2 * d1)

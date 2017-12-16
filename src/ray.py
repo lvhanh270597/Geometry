@@ -9,8 +9,13 @@ class Ray(object):
     def __init__(self, L):        
         self.start = L[0]
         self.v = L[1]
-    def draw(self, name, color='black', arrow='none'):
+        self.name = L[0].name + L[1].name
+        if len(L) > 2: self.name = L[2]
+        self.drawn = False
+    def draw(self):
 
+        if self.drawn: return
+        # determine end point
         size = vector.size(self.v)
 
         dx = 10 / size
@@ -18,15 +23,19 @@ class Ray(object):
         
         xA = self.start.x + dx * self.v.a
         yA = self.start.y + dy * self.v.b
-        A = point.Point([xA, yA])
-
-        print('in ray: ' + name)
-        p = graphics.Point(A.dx - 10, A.dy - 10)
-        label = graphics.Text(p, name[-1])
-        label.draw(win)
+        A = point.Point([xA, yA, self.v.name])        
+        # draw start point and end point
+        self.start.draw()
+        A.draw()
+        # draw the line between start and end
+        line = graphics.Line(graphics.Point(self.start.dx, self.start.dy),
+                             graphics.Point(A.dx, A.dy))
         
-        seg = segment.Segment([self.start, A])
-        seg.draw(name, color, 'last')
+        line.setArrow('last')
+        line.draw(win)
+
+        #decide drawn = False
+        self.drawn = True
         
     def __str__(self):
     	return "(" + str(self.start) + ", " + str(v) + ')'    	

@@ -9,13 +9,18 @@ class Triangle(object):
         self.A = L[0]
         self.B = L[1]
         self.C = L[2]
-    def draw(self, color='black'):
+        self.drawn = False
+        self.name = 'unknown'
+        if len(L) > 3: self.name = L[3]        
+    def draw(self):
+        if self.drawn: return
         AB = sm.Segment([self.A, self.B])
         AC = sm.Segment([self.A, self.C])
         BC = sm.Segment([self.B, self.C])
-        AB.draw(color)
-        AC.draw(color)
-        BC.draw(color)
+        AB.draw()
+        AC.draw()
+        BC.draw()
+        self.drawn = True
 
 def equal(A, B):
     return A.x == B.x and A.y == B.y

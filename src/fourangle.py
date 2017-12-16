@@ -9,15 +9,20 @@ class Fourangle(object):
         self.B = L[1]
         self.C = L[2]
         self.D = L[3]
-    def draw(self, color='black'):
+        self.drawn = False
+        self.name = L[0].name + L[1].name + L[2].name + L[3].name
+        if len(L) > 4: self.name = L[4]
+    def draw(self):
+        if self.drawn: return 
         AB = sm.Segment([self.A, self.B])
         BC = sm.Segment([self.B, self.C])
         CD = sm.Segment([self.C, self.D])
         DA = sm.Segment([self.D, self.A])
-        AB.draw(color)
-        BC.draw(color)
-        CD.draw(color)
-        DA.draw(color)
+        AB.draw()
+        BC.draw()
+        CD.draw()
+        DA.draw()
+        self.drawn = True
 
 def equal(A, B):
     return A.x == B.x and A.y == B.y
