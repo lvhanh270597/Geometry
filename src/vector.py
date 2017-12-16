@@ -6,13 +6,13 @@ class Vector(object):
 	"""docstring for Vector"""
 	def __init__(self, L):
 		a = L[0]
-		b = L[1]
+		b = L[1]		
 		self.a = a
 		self.b = b
 		self.name = 'unknown'
 		if len(L) > 2: self.name = L[2]
 	def __str__(self):
-		return "(" + str(a) + ", " + str(b) + ")"
+		return "(" + str(self.a) + ", " + str(self.b) + ")"
 
 def rand(L = None):
 	s = 0
@@ -40,6 +40,6 @@ def directVector_1(L):
 
 # trả về vector chỉ phương của đoạn thẳng
 def directVector_2(L):
-	segment = L[0]
-	return Vector([segment.end.x-segment.begin.x,
-					segment.end.y-segment.begin.y])
+	S = L[0]
+	return Vector([S.end.x - S.begin.x, \
+                       S.end.y - S.begin.y])

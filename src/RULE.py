@@ -6,7 +6,10 @@ MAX_H = 500
 
 ratio = 20
 
+e = 1e-4
+
 Ox = MAX_W / 2
 Oy = MAX_H / 2
 
 win = graphics.GraphWin("My windows", MAX_W, MAX_H)
+

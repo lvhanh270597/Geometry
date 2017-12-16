@@ -12,14 +12,19 @@ class Ray(object):
         self.name = L[0].name + L[1].name
         if len(L) > 2: self.name = L[2]
         self.drawn = False
+        self.maxsize = 10
+
+    def inscreaseSize(self, P):
+        self.maxsize = max(self.maxsize, mathfunctions.distance([self.start, P]))
+
     def draw(self):
 
         if self.drawn: return
         # determine end point
         size = vector.size(self.v)
 
-        dx = 10 / size
-        dy = 10 / size
+        dx = self.maxsize / size
+        dy = self.maxsize / size
         
         xA = self.start.x + dx * self.v.a
         yA = self.start.y + dy * self.v.b

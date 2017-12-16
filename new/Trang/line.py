@@ -6,6 +6,7 @@ import vector
 import math
 import mathfunctions
 import graphics
+import angle
 from RULE import *
 
 class Line(object):
@@ -58,23 +59,16 @@ def throughPoint_1(L):
     return Line([a, b, c])
 
 
-def duongTrungTruc(L):
-    A = L[0]
-    B = L[1]
-    M = point.center([A, B])
-    seg = segment.Segment([A, B])
-    d = convertSegment([seg])
-    return combine_1([M, d])
-
 # return a line which is combined with another to create the angle
 # note that: angle is float variable
 def combine_angle(L):
     line = L[0]
     angle = L[1]
-    num = math.pow(math.cos(math.radians(angle))*math.sqrt(math.pow(line.a,2) + math.pow(line.b,2)),2)
-    a = mathfunctions.pt(line.a**2 - num, 2*line.a*line.b, line.b**2 - num)
+    x = mathfunctions.cos_between_two_vector(angle.v1.v, angle.v2.v)
+    num = math.pow(x * math.sqrt(math.pow(line.a,2) + math.pow(line.b,2)),2)
+    a = mathfunctions.pt([line.a**2 - num, 2*line.a*line.b, line.b**2 - num])
     b = 1
-    point1 = point.Point([0, 1]);
+    point1 = point.Point([1, 0]);
     c = -(a*point1.x + b*point1.y)
     return Line([a, b, c])
 # return a line which is through the point and 'vuong goc' with the line
@@ -107,6 +101,5 @@ def convertRay(L):
     b = ray.v.a
     c = -(a*ray.start.x + b*ray.start.y)
     return Line([a, b, c])
-
 
 

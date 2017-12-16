@@ -3,7 +3,6 @@ import random
 import point
 import graphics
 import vector
-import mathfunctions
 from RULE import *
 
 class Segment(object):
@@ -33,11 +32,11 @@ def rand(L=None):
 def convertRay(L):
     ray = L[0]
     size = vector.size(ray.v)
-    dx = 10/size
-    dy = 10/size
+    dx = 10 / size
+    dy = 10 / size
     a = ray.start
     x = ray.v.a * dx + a.x
     y = ray.v.b * dy + a.y
-    b = point.Point([x,y])
-    return Segment([a,b])
+    b = point.Point([x, y])
+    return Segment([a, b])
     

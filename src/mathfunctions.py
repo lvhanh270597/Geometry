@@ -2,8 +2,8 @@ import math
 import point
 import line
 import random
-import vector
 import segment
+import vector
 
 def pt(L):
     a = L[0]
@@ -21,7 +21,11 @@ def pt(L):
 def cos_between_two_vector(v1, v2):
     t = v1.a * v2.a + v1.b * v2.b
     m = vector.size(v1) * vector.size(v2)
-    return t / m 
+    return t / m
+
+def angle_between_two_vector(v1, v2):
+    cos = cos_between_two_vector(v1, v2)
+    return math.acos(cos)
 
 def degToRad(x):
     return (x / 180) * math.pi
@@ -59,18 +63,24 @@ def gcd(a, b):
     if b == 0: return a
     return gcd(b, a % b)
 
-def sort(L):    
-    n = len(L)
-    for i in range(n - 1):
-        index = i
-        for j in range(i + 1, n):
-            if (L[index].y < L[j].y) or \
-            ((L[index].y == L[j].y) and (L[index].x > L[j].x)):
-                index = j
-        t = L[index]
-        L[index] = L[i]
-        L[i] = t
-    return L
+def checkInSegment(P, S):
+    A = S.begin
+    B = S.end
+    vAB = vector.make_from_two_points(A, B)
+    vAP = vector.make_from_two_points(A, P)
+    vPB = vector.make_from_two_points(P, B)
+
+    d1 = vector.size(vAP)
+    d2 = vector.size(vAB)
+    d3 = vector.size(vPB)
+    
+    return (d1 + d3 == d2)
+
+def checkInRay(P, R):
+    A = R.start
+    v = R.v
+    B = point.Point([A.x + 1000 * v.a, A.y + 1000 * v.b])
+    return checkInSegment(P, segment.Segment([A, B]))
 
 def intersect(M, L):
     seg_1 = L[0]
@@ -84,8 +94,3 @@ def intersect(M, L):
     if kc_1 + kc_2 == kc_3 and kc_4 + kc_5 == kc_6:
         return True
     return False
-    
-
-
-
-

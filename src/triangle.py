@@ -1,6 +1,7 @@
 
 import point
 import segment as sm
+import mathfunctions
 from RULE import *
 
 
@@ -22,14 +23,17 @@ class Triangle(object):
         BC.draw()
         self.drawn = True
 
-def equal(A, B):
-    return A.x == B.x and A.y == B.y
+def isTamGiac(A, B, C):
+    a = mathfunctions.distance([A, B])
+    b = mathfunctions.distance([B, C])
+    c = mathfunctions.distance([A, C])
+    return (a + b > c) and (a + c > b) and (b + c > a)
 
 def rand(L = None):
     A = point.rand()
     B = point.rand()
     C = point.rand()
-    while equal(A, B) or equal(B, C) or equal(A, C):
+    while not isTamGiac(A, B, C):
         A = point.rand()
         B = point.rand()
         C = point.rand()

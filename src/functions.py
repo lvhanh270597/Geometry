@@ -12,7 +12,7 @@ import fourangle
 import vector
 import mathfunctions
 from RULE import *
-import template
+from template import *
 
 functions = {
     'point.rand'                    : point.rand,    
@@ -61,6 +61,13 @@ functions = {
 }
 
 def main():
+    #template.TamGiacVuong('ABC')
+    #template.DoanPhanGiac('E', 'ABC')
+    HinhThoi('ABCD')
+    DuongCaoTuGiac('H', 'ABCD')
+    DuongCaoTuGiac('K', 'ADCB')
+    
+    
     
 main()
 
