@@ -4,6 +4,7 @@ import line
 import random
 import segment
 import vector
+import RULE
 
 def pt(L):
     a = L[0]
@@ -74,7 +75,7 @@ def checkInSegment(P, S):
     d2 = vector.size(vAB)
     d3 = vector.size(vPB)
     
-    return (d1 + d3 == d2)
+    return (abs(d1 + d3 - d2) < RULE.e)
 
 def checkInRay(P, R):
     A = R.start

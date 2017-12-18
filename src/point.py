@@ -86,30 +86,11 @@ def outsideTriangle(L):
     C = triangle.C
 
     M = onSegment([segment.Segment([B, C])])
+    
     v = vector.make_from_two_points(A, M)
     r = random.random()
     M = Point([M.x + r * v.a, M.y + r * v.b])
     return M
-
-def insideAngle2(L):
-    angle = L[0]
-    O = angle.v1.start
-    v1 = angle.v1.v
-    v2 = angle.v2.v
-
-    size1 = vector.size(v1)
-    size2 = vector.size(v2)
-    d1 = 10 / size1
-    d2 = 10 / size2        
-    x1 = O.x + d1 * v1.a
-    y1 = O.y + d1 * v1.b
-    t = random.randint(1, 10)
-    x2 = O.x + d2 * v2.a
-    y2 = O.y + d2 * v2.b
-    A = O
-    B = Point([x1, y1])
-    C = Point([x2, y2])    
-    return outsideTriangle([triangle.Triangle([A, B, C])])
     
 # return a point which is on a line
 # sao cho, diem do luon nam trong man hinh

@@ -13,7 +13,10 @@ class Line(object):
         self.a = L[0]
         self.b = L[1]
         self.c = L[2]
-    def draw(self, name=None, color='black', arrow='none'):
+        self.name = 'unknown'
+        if len(L) > 3: self.name = L[3]
+        self.drawn = False
+    def draw(self):
         if self.a == 0:            
             p1 = point.Point([-100, -self.c])
             p2 = point.Point([100, -self.c])            
@@ -30,9 +33,9 @@ class Line(object):
         
         p1 = graphics.Point(p1.dx, p1.dy)
         p2 = graphics.Point(p2.dx, p2.dy)
-        seg = graphics.Line(p1, p2)
-        seg.setOutline(color)        
+        seg = graphics.Line(p1, p2)        
         seg.draw(win)
+        self.drawn = True
     def __str__(self):
         return str(self.a) + "x + " + str(self.b) + "y + " + str(self.c) + " = 0"
 
@@ -65,6 +68,14 @@ def duongTrungTruc(L):
     seg = segment.Segment([A, B])
     d = convertSegment([seg])
     return combine_1([M, d])
+
+def duongTrungTuyen(L):
+    tri = L[0]
+    (A, B, C) = (tri.A, tri.B, tri.C)
+    M = point.center([B, C])
+    seg = segment.Segment([A, M])
+    d = convertSegment([seg])
+    return d
 
 # return a line which is combined with another to create the angle
 # note that: angle is float variable
