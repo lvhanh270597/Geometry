@@ -6,6 +6,7 @@ from circle import *
 from angle import *
 from vector import *
 import mathfunctions
+import random
 import graphics
 from RULE import *
 
@@ -30,17 +31,9 @@ class Point(object):
     def __str__(self):
         return "(" + str(self.x) + "; " + str(self.y) + ")"
 	
-def rand(L = []):
-    if len(L) > 0:
-        d = L[0]
-    else:
-        d = 5
-    sx = int(-MAX_W / (2 * ratio) + d)
-    tx = int(MAX_W / (2 * ratio) - d)
-    sy = int(-MAX_H / (2 * ratio) + d)
-    ty = int(MAX_H / (2 * ratio) - d)
-    x = random.randint(sx, tx)
-    y = random.randint(sy, ty)
+def rand():
+    x = random.randint(-TOP_X, TOP_X)
+    y = random.randint(-TOP_Y, TOP_Y)
     return Point([x, y])
 def taoHam(a, b, point):
     c = -(a*point.x + b*point.y)
@@ -88,8 +81,12 @@ def outsideTriangle(L):
     M = onSegment([segment.Segment([B, C])])
     
     v = vector.make_from_two_points(A, M)
-    r = random.random()
-    M = Point([M.x + r * v.a, M.y + r * v.b])
+    r = random.random()    
+    x = M.x + r * v.a
+    y = M.y + r * v.b
+    M = Point([x, y])
+    if (x > TOP_X) or (y > TOP_Y):
+        M = Point([M.x - r * v.a, M.y - r * v.b])
     return M
     
 # return a point which is on a line
@@ -99,28 +96,32 @@ def onLine(L):
     a = line.a
     b = line.b
     c = line.c
-    if a == 0: return Point([0, mathfunctions.getY(line, 0)])
-    if b == 0: return Point([mathfunctions.getX(line, 0), 0])
-    Left = (-5 * b - c) / a
-    Right = (5 * b - c) / a
-    if Left > Right:
-        t = Left
-        Left = Right
-        Right = t
-    x = 0
-    if Left > 0:
-        x = Left                
-    if Right < 0:
-        x = Right        
+
+    if a == 0:
+        x = random.randint(-TOP_X, TOP_X)
+        return Point([x, -c / b])
+    if b == 0:
+        y = random.randint(-TOP_Y, TOP_Y)
+        return Point([-c / a, y])
+    
+    Left = (-TOP_Y * b - c) / a
+    Right = (TOP_Y * b - c) / a
+    if Left > Right: (Left, Right) = (Right, Left)        
+
+    Left = max(Left, -TOP_X)
+    Right = min(Right, TOP_X)
+
+    x = Left + (Right - Left) * random.random()
 
     M = Point([x, mathfunctions.getY(line, x)])
     return M
     
 def onSegment(L):
     seg = L[0]
-    u = vector.directVector_2([seg])
+    u = vector.directVector_2([L[0]])
     t = random.random()
-    return Point([seg.begin.x + u.a * t, seg.begin.y + u.b * t])
+    return Point([seg.begin.x + u.a * t, \
+                  seg.begin.y + u.b * t])
 def onCircle(L):
     C = L[0]
     alpha = random.randint(30, 180)
@@ -150,8 +151,8 @@ def center(L):
     A = L[0]
     B = L[1]
     seg = segment.Segment([A, B])
-    x = (seg.end.x + seg.begin.x)/2
-    y = (seg.end.y + seg.begin.y)/2
+    x = (seg.end.x + seg.begin.x) / 2
+    y = (seg.end.y + seg.begin.y) / 2
     return Point([x, y])
 # return a point which is on a segment with the ratio between distance from Begin and End of the segment
 def distanceRatio(L):
@@ -163,29 +164,25 @@ def distanceRatio(L):
     return Point([x, y])    
 # return a point which will be combined with another to create a segment that 'vuong goc' with the line
 def combine_1(L):
-    point = L[0]
-    L = L[1]
-    b = -L.a
-    a = L.b
-    c = -(a*point.x + b* point.y)
-    d = line.Line([a, b, c])
-    return onLine([d])
+    (P, L1) = L
+    (b, a) = (-L1.a, L1.b)
+    c = -(a * P.x + b * P.y)
+    return onLine([line.Line([a, b, c])])
 # return a point which will be combined with anothor to create a segment that 'song song' with the line
 def combine_2(L):
-    point = L[0]
-    line = L[1]
-    a = line.a
-    b = line.b
-    c = -(a*point.x + b*point.y)
+    (P, L1) = L
+    (a, b, c) = (L1.a, L1.b, -(a * P.x + b * P.y))
     return onLine([Line(a, b, c)])
 # return a point whose segment with another is equal d
 def combine_3(L):
-    point = L[0]
-    distance = L[1]
-    x = point.x + distance * random.random()
-    k = distance**2 - (point.x - x)**2
-    c = random.choice([-1, 1])    
-    y = point.y + c * math.sqrt(k)    
+    (P, Dist) = L
+
+    x = P.x + Dist * random.random()
+    if (x > TOP_X): x = P.x - Dist * random.random()
+    
+    delta_y = Dist ** 2 - (P.x - x) ** 2
+    y = P.y + math.sqrt(delta_y)
+    if (y > TOP_Y): y = P.y - math.sqrt(delta_y)
     return Point([x, y])
     
 # return a point which is intersection between two lines
@@ -205,11 +202,11 @@ def combine_triangle(L):
     b = -(point1.x - point2.x)
     c = -(a*point1.x + b*point1.y)
     k = False
-    while k==False:
+    while not k:
         x = random.randint(0,10)
         y = random.randint(0,10)
         if a*x + b*y + c !=0:
-            k= True
+            k = True
     return Point([x, y])
 # return a point which will be combined with the others to create a square
 def combine_square(L):
@@ -278,15 +275,15 @@ def intersect_line_circle(T):
         a = 1
         b = -2 * x0            
         c = x0 * x0 + (y - y0)**2 - C.R*C.R
-        n0 = mathfunctions.expr_degree_two([a, b, c])
+        n0 = mathfunctions.expr_degree_two(a, b, c)
         if len(n0) == 0: return []
         xA = n0[0]
         yA = mathfunctions.getY(L, xA)
-        res = [Point(xA, yA)]
+        res = [Point([xA, yA])]
         if len(n0) > 1:
             xB = n0[1]
             yB = mathfunctions.getY(L, xB)
-            res += [Point(xB, yB)]
+            res += [Point([xB, yB])]
         return res
 
     if L.b == 0:
@@ -298,11 +295,11 @@ def intersect_line_circle(T):
         if len(n0) == 0: return []
         yA = n0[0]
         xA = mathfunctions.getX(L, yA)
-        res = [Point(xA, yA)]        
+        res = [Point([xA, yA])]        
         if len(n0) > 1:
             yB = n0[1]
             xB = mathfunctions.getX(L, yB)
-            res += [Point(xB, yB)]
+            res += [Point([xB, yB])]
         return res
     
     x1 = -10
@@ -354,4 +351,3 @@ def intersect_two_circles(L):
     B = Point([xB2, yB1])
 
     return [A, B]
-

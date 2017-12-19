@@ -40,7 +40,7 @@ def ganHoanVi(S, v):
 ############################################################
 def Tia(Ox):
     Var = V()
-    if Ox in Var: return
+    if Ox in Var: return    
     O = Ox[0]
     x = Ox[1]    
     if O not in Var:        
@@ -121,22 +121,14 @@ def TamGiacVuong(ABC, show=1):
     (A, B, C) = map(str, list(ABC))
     if (A not in Var) and \
        (B not in Var) and \
-       (C not in Var):        
-        value[A] = point.rand()
-        value[B] = point.rand()        
-        value[A].name = A
-        value[B].name = B
+       (C not in Var):
+
+        value[A] = point.Point([random.randint(-8, -3), -2, A])        
+        value[B] = point.Point([value[A].x + random.randint(8, 12), -2, B])        
         
         d = line.convertSegment([segment.Segment([value[A], value[B]])])
         point_C = point.combine_1([value[A], d])
-
         while not triangle.isTamGiac(value[A], value[B], point_C):
-            value[A] = point.rand()
-            value[B] = point.rand()        
-            value[A].name = A
-            value[B].name = B
-            
-            d = line.convertSegment([segment.Segment([value[A], value[B]])])
             point_C = point.combine_1([value[A], d])
         
         point_C.name = C        
@@ -157,13 +149,16 @@ def TamGiacCan(ABC, show=1):
     if (A not in Var) and \
        (B not in Var) and \
        (C not in Var):        
-        value[B] = point.rand()
-        value[B].name = B
-        value[C] = point.rand()
-        value[C].name = C
+        value[B] = point.Point([random.randint(-8, -3), -2, B])        
+        value[C] = point.Point([value[B].x + 8, -2, C])        
         
         d = line.duongTrungTruc([value[B], value[C]])
         value[A] = point.onLine([d])
+        dist = mathfunctions.distance_line([value[A], d]) 
+        while not triangle.isTamGiac(value[A], value[B], value[C]):
+            value[A] = point.onLine([d])
+            dist = mathfunctions.distance_line([value[A], d])         
+        
         value[A].name = A
         
         tgABC = triangle.Triangle([value[A], value[B], value[C], ABC])
@@ -179,11 +174,15 @@ def TamGiacVuongCan(ABC, show=1):
     (A, B, C) = map(str, list(ABC))
     if (A not in Var) and \
        (B not in Var) and \
-       (C not in Var):        
-        value[B] = point.rand()
+       (C not in Var):
+
+        value[B] = point.Point([random.randint(-8, -3), -2, B])        
+        value[C] = point.Point([value[B].x + random.randint(8, 12), -2, C])        
+        
+        '''value[B] = point.rand()
         value[B].name = B
         value[C] = point.rand()
-        value[C].name = C
+        value[C].name = C'''
         
         d = line.duongTrungTruc([value[B], value[C]])
 
@@ -191,7 +190,7 @@ def TamGiacVuongCan(ABC, show=1):
         dis = mathfunctions.distance([value[B], value[C]])
         c = circle.Circle([M, dis / 2])        
         
-        value[A] = point.intersect_line_circle([d, c])[0]
+        value[A] = point.intersect_line_circle([d, c])[random.randint(0, 1)]
         value[A].name = A
         
         tgABC = triangle.Triangle([value[A], value[B], value[C], ABC])
@@ -212,16 +211,14 @@ def TamGiacDeu(ABC):
     if (A not in Var) and \
        (B not in Var) and \
        (C not in Var):        
-        value[B] = point.rand()
-        value[B].name = B
-        value[C] = point.rand()
-        value[C].name = C
+        value[B] = point.Point([random.randint(-8, -3), -2, B])        
+        value[C] = point.Point([value[B].x + 8, -2, C])        
 
         dis = mathfunctions.distance([value[B], value[C]])
         c1 = circle.Circle([value[B], dis])
         c2 = circle.Circle([value[C], dis])
         
-        value[A] = point.intersect_two_circles([c1, c2])[0]
+        value[A] = point.intersect_two_circles([c1, c2])[random.randint(0, 1)]
         value[A].name = A
         
         tgABC = triangle.Triangle([value[A], value[B], value[C], ABC])
@@ -260,9 +257,7 @@ def TuGiac(ABCD):
 
         pD = point.outsideTriangle([tri])
 
-        t = pC
-        pC = pD
-        pD = t
+        (pD, pC) = (pC, pD)    
         
         pA.name = A
         pB.name = B
@@ -296,13 +291,13 @@ def HinhThang(ABCD):
        (B not in Var) and \
        (C not in Var) and \
        (D not in Var):    
-        pD = point.rand()
-        dis = random.randint(4, 8)
-        pC = point.combine_3([pD, dis])
+        pD = point.Point([-4, -2])
+        dis = random.randint(8, 12)
+        pC = point.Point([pD.x + dis, -2])
         DC = segment.Segment([pD, pC])
         dDC = line.convertSegment([DC])
-        ratio1 = random.random() * 0.2
-        ratio2 = 0.5 + random.random() * 0.5
+        ratio1 = random.choice([0.2, 0.1])
+        ratio2 = random.choice([0.6, 0.7])
         
         M = point.distanceRatio([DC, ratio1])
         N = point.distanceRatio([DC, ratio2])
@@ -338,14 +333,14 @@ def HinhThangCan(ABCD):
        (B not in Var) and \
        (C not in Var) and \
        (D not in Var):    
-        pD = point.rand()
-        dis = random.randint(4, 8)
-        pC = point.combine_3([pD, dis])
+        pD = point.Point([-4, -2])
+        dis = random.randint(8, 12)
+        pC = point.Point([pD.x + dis, -2])
         DC = segment.Segment([pD, pC])
         dDC = line.convertSegment([DC])
-        r = random.random()
-        ratio1 = r * 0.5
-        ratio2 = 1 - r * 0.5        
+        ratio1 = random.choice([0.2, 0.3])
+        ratio2 = 1 - ratio1
+        
         M = point.distanceRatio([DC, ratio1])
         N = point.distanceRatio([DC, ratio2])
         d1 = line.combine_1([M, dDC])
@@ -387,7 +382,7 @@ def HinhThangVuong(ABCD):
         pD = tri.C
 
         vAB = vector.make_from_two_points(pA, pB)
-        r = random.random()
+        r = 0.6
         pC = point.Point([pD.x + (1 + r) * vAB.a, pD.y + (1 + r) * vAB.b])
         
         pA.name = A
@@ -415,10 +410,11 @@ def HinhBinhHanh(ABCD):
        (C not in Var) and \
        (D not in Var):
         ADB = A + D + B
-        tri = TamGiac(ADB, show=0)
+        tri = TamGiac([ADB], show=0)
         pA = tri.A
         pB = tri.B
-        pD = tri.C
+        pD = point.Point([pA.x + random.choice([-3, -4, 3, 4]), \
+                          pA.y + random.choice([-3,-4, 3, 4])])
         
         vAB = vector.make_from_two_points(pA, pB)
         pC = point.Point([pD.x + vAB.a, pD.y + vAB.b])
@@ -438,6 +434,31 @@ def HinhBinhHanh(ABCD):
         #value[ABCD] = tgABCD
         tgABCD.draw()
 
+def SmallTamGiacCan(ABC):
+    Var = V()
+    if ABC in Var: return
+    (A, B, C) = map(str, list(ABC))
+    if (A not in Var) and \
+       (B not in Var) and \
+       (C not in Var):        
+        value[B] = point.Point([-8, -2, B])        
+        value[C] = point.Point([value[B].x + 15, -2, C])        
+        
+        d = line.duongTrungTruc([value[B], value[C]])
+        d2 = line.convertSegment([segment.Segment([value[B], value[C]])])
+        value[A] = point.onLine([d])        
+        dist = mathfunctions.distance_line([value[A], d2]) 
+        while (dist < 3) or (dist > 6):
+            value[A] = point.onLine([d])
+            dist = mathfunctions.distance_line([value[A], d2])         
+        
+        value[A].name = A
+        
+        tgABC = triangle.Triangle([value[A], value[B], value[C], ABC])
+        value[ABC] = tgABC
+        return tgABC
+
+
 def HinhThoi(ABCD):
     Var = V()
     if ABCD in Var: return
@@ -448,7 +469,7 @@ def HinhThoi(ABCD):
        (C not in Var) and \
        (D not in Var):
         ADB = A + D + B
-        tri = TamGiacCan(ADB, show=0)
+        tri = SmallTamGiacCan(ADB)
         pA = tri.A
         pB = tri.B
         pD = tri.C
@@ -474,6 +495,7 @@ def HinhThoi(ABCD):
         
         tgABCD.draw()
 
+        
 def HinhVuong(ABCD):
     Var = V()
     if ABCD in Var: return
@@ -483,26 +505,26 @@ def HinhVuong(ABCD):
        (B not in Var) and \
        (C not in Var) and \
        (D not in Var):
-        ADB = A + D + B
-        tri = TamGiacVuongCan(ADB, show=0)
-        pA = tri.A
+        #ADB = A + D + B
+        #tri = SmallTamGiacVuongCan(ADB)
+        '''pA = tri.A
         pB = tri.B
-        pD = tri.C
+        pD = tri.C'''
         
-        M = point.center([pB, pD])
-        pC = point.Point([2 * M.x - pA.x, 2 * M.y - pA.y])
+        #M = point.center([pB, pD])
+        #pC = point.Point([2 * M.x - pA.x, 2 * M.y - pA.y])
         
-        pA.name = A
+        '''pA.name = A
         pB.name = B
         pC.name = C
-        pD.name = D
+        pD.name = D'''
 
-        value[A] = pA
-        value[B] = pB
-        value[C] = pC
-        value[D] = pD        
+        value[A] = point.Point([-4, -4, A])
+        value[B] = point.Point([+4, -4, B])
+        value[C] = point.Point([+4, +4, C])
+        value[D] = point.Point([-4, +4, D])
 
-        tgABCD = fourangle.Fourangle([pA, pB, pC, pD, ABCD])
+        tgABCD = fourangle.Fourangle([value[A], value[B], value[C], value[D], ABCD])
         ganHoanVi(ABCD, tgABCD)
         #value[ABCD] = tgABCD
         tgABCD.draw()
@@ -1351,9 +1373,7 @@ def HaiTiaDoiNhau(Oxy):
     ray_Oy.draw()
 
 
-
-
-
+HinhChuNhat('ABCD')
 
 
 
