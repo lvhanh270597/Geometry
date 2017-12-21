@@ -1,0 +1,159 @@
+30
+1
+doan thang
+doan thang
+1
+duong thang
+duong thang
+1
+duong trung truc
+doan thang
+3
+ve
+la duong trung binh cua tam giac
+tai dinh
+doan thang
+tam giac
+diem
+1
+ve tam giac
+tam giac
+2
+tam giac vuong
+vuong tai
+tam giac
+diem
+2
+tam giac can
+can tai
+tam giac
+diem
+2
+tam giac vuong can
+vuong can tai
+tam giac
+diem
+1
+tam giac deu
+tam giac
+2
+ve
+la duong trung tuyen cua tam giac
+doan thang
+tam giac
+2
+ve duong tron tam
+ngoai tiep tam giac
+diem
+tam giac
+2
+ve tia phan giac
+cua tam giac
+doan thang
+tam giac
+3
+qua
+ve duong thang
+song song voi duong thang
+diem
+duong thang
+duong thang
+3
+qua
+ve duong thang
+song song voi doan
+diem
+duong thang
+doan thang
+3
+qua
+ve duong thang
+vuong goc voi duong thang
+diem
+duong thang
+duong thang
+3
+qua
+ve duong thang
+vuong goc voi doan thang
+diem
+duong thang
+doan thang
+2
+goi
+la trung diem cua
+diem
+doan thang
+2
+ve diem
+nam giua
+diem
+doan thang
+3
+goi
+la giao diem cua
+va
+diem
+doan thang
+doan thang
+2
+ve diem
+nam trong tam giac
+diem
+tam giac
+2
+ve diem
+nam ngoai tam giac
+diem
+tam giac
+2
+ve diem
+thuoc duong thang
+diem
+duong thang
+2
+ve hai doan thang song song voi nhau
+va
+doan thang
+doan thang
+2
+ve hai doan thang vuong goc voi nhau
+va
+doan thang
+doan thang
+2
+goi
+la trong tam cua tam giac
+diem
+tam giac
+2
+ve
+la duong cao cua tam giac
+doan thang
+tam giac
+2
+goi
+la truc tam cua tam giac
+diem
+tam giac
+3
+goi
+la giao diem cua duong thang
+va doan thang
+diem
+duong thang
+doan thang
+3
+goi
+la giao diem cua hai duong thang
+va
+diem
+duong thang
+duong thang
+3
+goi
+diem doi xung voi
+qua
+diem
+diem
+doan thang

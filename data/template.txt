@@ -1,9 +1,0 @@
-tam giac,1
-doan thang,1
-duong thang,1
-duong cao,ha tu,tam giac,3
-duong cao,1
-phan giac,2
-trung tuyen,2
-duong cao, tam giac,2
-phan giac,tam giac,2

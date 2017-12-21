@@ -82,7 +82,16 @@ def checkInRay(P, R):
     v = R.v
     B = point.Point([A.x + 1000 * v.a, A.y + 1000 * v.b])
     return checkInSegment(P, segment.Segment([A, B]))
-
+def checkIntersect(L):
+    M = L[0]
+    seg_1 = L[1]
+    kc_1 = distance([seg_1.begin, M])
+    kc_2 = distance([M, seg_1.end])
+    kc_3 = distance([seg_1.begin, seg_1.end])
+    if kc_1 + kc_2 == kc_3:
+        return True
+    return False
+    
 def intersect(M, L):
     seg_1 = L[0]
     seg_2 = L[1]

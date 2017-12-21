@@ -18,13 +18,13 @@ class Line(object):
         self.drawn = False
     def draw(self):
         if self.a == 0:            
-            p1 = point.Point([-100, -self.c])
-            p2 = point.Point([100, -self.c])            
+            p1 = point.Point([-100, -self.c / self.b])
+            p2 = point.Point([100, -self.c / self.b])            
 
         else:
             if self.b == 0:            
-                p1 = point.Point([-self.c, -100])
-                p2 = point.Point([-self.c, 100])                
+                p1 = point.Point([-self.c / self.a, -100])
+                p2 = point.Point([-self.c / self.a, 100])                
             else:
                 a = -25
                 b = 25
@@ -67,6 +67,7 @@ def duongTrungTruc(L):
     M = point.center([A, B])
     seg = segment.Segment([A, B])
     d = convertSegment([seg])
+    d2 = combine_1([M, d])
     return combine_1([M, d])
 
 def duongTrungTuyen(L):
@@ -74,6 +75,19 @@ def duongTrungTuyen(L):
     (A, B, C) = (tri.A, tri.B, tri.C)
     M = point.center([B, C])
     seg = segment.Segment([A, M])
+    d = convertSegment([seg])
+    return d
+
+def duongTrungBinh(L):
+    tri = L[0]
+    A = L[1]
+    (D, B, C) = (tri.A, tri.B, tri.C)
+    if A.name == B.name: B = D
+    if A.name == C.name: C = D
+        
+    M = point.center([A, B])
+    N = point.center([A, C])
+    seg = segment.Segment([M, N])
     d = convertSegment([seg])
     return d
 
@@ -94,7 +108,7 @@ def combine_1(L):
     line = L[1]
     a = line.b
     b = -line.a
-    c = -(a*point.x + b*point.y)
+    c = -(a * point.x + b * point.y)
     return Line([a, b, c])
 # return a line which is through the point and 'song song' with the line
 def combine_2(L):

@@ -38,26 +38,10 @@ def ganHoanVi(S, v):
 ########################### Hanh ###########################
 ############################################################
 ############################################################
-def Tia(Ox):
-    Var = V()
-    if Ox in Var: return    
-    O = Ox[0]
-    x = Ox[1]    
-    if O not in Var:        
-        value[O] = point.rand()
-        value[O].name = O
-    if x not in Var:                
-        value[x] = vector.rand()
-        value[x].name = x
-        
-    ray_Ox = ray.Ray([value[O], value[x], Ox])    
-    value[Ox] = ray_Ox
-    ray_Ox.draw()
-
 def Doan(L, show=1):
     AB = L[0]
     Var = V()
-    if AB in Var: return value[AB]
+    if AB in Var:   return value[AB]
     A = AB[0]
     B = AB[1]
     if A not in Var:        
@@ -75,13 +59,59 @@ def Doan(L, show=1):
 
 def Duong(L, show=1):
     dAB = L[0]
-    
     AB = dAB[1 :]
-    doanAB = Doan(AB, show = 0)
+    doanAB = Doan([AB], show = 0)
     duongAB = line.convertSegment([doanAB])
     if show == 1: duongAB.draw()
     value[dAB] = duongAB
     return duongAB
+
+def DuongTrungTruc(L):
+    AB = L[0]
+    Var = V()
+    if AB in Var: return value[AB]
+    (A, B) = list(AB)
+    ln_AB = line.duongTrungTruc([value[A], value[B]])
+    ln_AB.draw()
+    return ln_AB
+
+# doan trung binh MN cua tam giac ABC, tai dinh A
+def DoanTrungBinh(L):
+    MN = L[0]
+    ABC = L[1]
+    AA = L[2]
+
+    (A, B, C) = list(ABC)
+    (D, E, F) = list(ABC)
+
+    pA = value[A]
+    pB = value[B]
+    pC = value[C]
+    
+    if AA == E:
+        (pA, pB, pC) = (value[E], value[D], value[F])
+    if AA == F:
+        (pA, pB, pC) = (value[F], value[E], value[D])
+    
+    Var = V()
+    if MN in Var: return
+    
+    (M, N) = list(MN)
+    
+    ln_TB = line.duongTrungBinh([value[ABC], pA])
+    
+    seg_AB = segment.Segment([pA, pB])
+    ln_AB = line.convertSegment([seg_AB])
+    seg_AC = segment.Segment([pA, pC])
+    ln_AC = line.convertSegment([seg_AC])
+    value[M] = point.intersection([ln_TB, ln_AB])
+    value[M].name = M
+    value[N] = point.intersection([ln_TB, ln_AC])
+    value[N].name = N
+    seg_MN = segment.Segment([value[M], value[N]])
+    value[MN] = seg_MN
+    seg_MN.draw()
+    
 
 def TamGiac(L, show=1):
     ABC = L[0]
@@ -115,14 +145,20 @@ def TamGiac(L, show=1):
             tgABC.draw()
         return tgABC
         
-def TamGiacVuong(ABC, show=1):
+def TamGiacVuong(L, show=1):    
+    ABC = L[0]
+    A = L[1]
+
+    (D, E, F) = list(ABC)
+    if A == E: ABC = E + D + F
+    if A == F: ABC = F + E + D
+    
     Var = V()
     if ABC in Var: return
     (A, B, C) = map(str, list(ABC))
     if (A not in Var) and \
        (B not in Var) and \
-       (C not in Var):
-
+       (C not in Var):        
         value[A] = point.Point([random.randint(-8, -3), -2, A])        
         value[B] = point.Point([value[A].x + random.randint(8, 12), -2, B])        
         
@@ -142,22 +178,31 @@ def TamGiacVuong(ABC, show=1):
         return tgABC
     TamGiac(ABC)
 
-def TamGiacCan(ABC, show=1):
+def TamGiacCan(L, show=1):    
+    ABC = L[0]
+    A = L[1]
+
+    (D, E, F) = list(ABC)
+    if A == E: ABC = E + D + F
+    if A == F: ABC = F + E + D
+
     Var = V()
+    
     if ABC in Var: return
     (A, B, C) = map(str, list(ABC))
     if (A not in Var) and \
        (B not in Var) and \
        (C not in Var):        
         value[B] = point.Point([random.randint(-8, -3), -2, B])        
-        value[C] = point.Point([value[B].x + 8, -2, C])        
+        value[C] = point.Point([value[B].x + random.randint(8, 12), -2, C])        
         
         d = line.duongTrungTruc([value[B], value[C]])
+        d2 = line.convertSegment([segment.Segment([value[B], value[C]])])
         value[A] = point.onLine([d])
-        dist = mathfunctions.distance_line([value[A], d]) 
-        while not triangle.isTamGiac(value[A], value[B], value[C]):
+        dist = mathfunctions.distance_line([value[A], d2]) 
+        while (dist < 3) or (dist > 10):
             value[A] = point.onLine([d])
-            dist = mathfunctions.distance_line([value[A], d])         
+            dist = mathfunctions.distance_line([value[A], d2])         
         
         value[A].name = A
         
@@ -168,14 +213,21 @@ def TamGiacCan(ABC, show=1):
         return tgABC
     TamGiac(ABC)
 
-def TamGiacVuongCan(ABC, show=1):
+def TamGiacVuongCan(L, show=1):    
+    ABC = L[0]
+    A = L[1]
+
+    (D, E, F) = list(ABC)
+    if A == E: ABC = E + D + F
+    if A == F: ABC = F + E + D
+
     Var = V()
+    
     if ABC in Var: return
     (A, B, C) = map(str, list(ABC))
     if (A not in Var) and \
        (B not in Var) and \
-       (C not in Var):
-
+       (C not in Var):        
         value[B] = point.Point([random.randint(-8, -3), -2, B])        
         value[C] = point.Point([value[B].x + random.randint(8, 12), -2, C])        
         
@@ -204,7 +256,8 @@ def TamGiacVuongCan(ABC, show=1):
         return tgABC
     TamGiac(ABC)
 
-def TamGiacDeu(ABC):
+def TamGiacDeu(L, show = 1):
+    ABC = L[0]
     Var = V()
     if ABC in Var: return
     (A, B, C) = map(str, list(ABC))
@@ -229,210 +282,23 @@ def TamGiacDeu(ABC):
     TamGiac(ABC)
 
 def TrungTuyen(L):
-    D = L[0]
+    AH = L[0]
     ABC = L[1]
+
+    (A, H) = list(AH)
+    (D, E, F) = list(ABC)
+    if A == E: ABC = E + F + D
+    if A == F: ABC = F + D + E
+    
     (A, B, C) = list(ABC)
     (pA, pB, pC) = (value[A], value[B], value[C])
-    pD = point.center([pB, pC])
-    pD.name = D
-    value[D] = pD
-    Doan(A + D)
-    return pD
-
-def TuGiac(ABCD):
-    Var = V()
-    if ABCD in Var: return
-    (A, B, C, D) = map(str, list(ABCD))
-    if (A not in Var) and \
-       (B not in Var) and \
-       (C not in Var) and \
-       (D not in Var):
-
-        tg = triangle.rand()
-        pA = tg.A
-        pB = tg.B
-        pC = tg.C
-
-        tri = triangle.Triangle([pA, pB, pC])
-
-        pD = point.outsideTriangle([tri])
-
-        (pD, pC) = (pC, pD)    
-        
-        pA.name = A
-        pB.name = B
-        pC.name = C
-        pD.name = D
-        value[A] = pA
-        value[B] = pB
-        value[C] = pC
-        value[D] = pD
-
-        tgABCD = fourangle.Fourangle([pA, pB, pC, pD, ABCD])
-        ganHoanVi(ABCD, tgABCD)
-        #value[ABCD] = tgABCD
-        tgABCD.draw()
-
-    if (A in Var) and \
-       (B in Var) and \
-       (C in Var) and \
-       (D in Var):
-        tgABCD = fourangle.Fourangle([value[A], value[B], \
-                                      value[C], value[D], ABCD])
-        ganHoanVi(ABCD, tgABCD)
-        tgABCD.draw()
-
-def HinhThang(ABCD):
-    Var = V()
-    if ABCD in Var: return
-    (A, B, C, D) = map(str, list(ABCD))
-
-    if (A not in Var) and \
-       (B not in Var) and \
-       (C not in Var) and \
-       (D not in Var):    
-        pD = point.Point([-4, -2])
-        dis = random.randint(8, 12)
-        pC = point.Point([pD.x + dis, -2])
-        DC = segment.Segment([pD, pC])
-        dDC = line.convertSegment([DC])
-        ratio1 = random.choice([0.2, 0.1])
-        ratio2 = random.choice([0.6, 0.7])
-        
-        M = point.distanceRatio([DC, ratio1])
-        N = point.distanceRatio([DC, ratio2])
-        d1 = line.combine_1([M, dDC])
-        
-        pA = point.onLine([d1])
-                
-        d2 = line.combine_2([pA, dDC])
-        d1 = line.combine_1([N, dDC])
-        pB = point.intersection([d1, d2])
-
-        pA.name = A
-        pB.name = B
-        pC.name = C
-        pD.name = D
-
-        value[A] = pA
-        value[B] = pB
-        value[C] = pC
-        value[D] = pD        
-
-        tgABCD = fourangle.Fourangle([pA, pB, pC, pD, ABCD])
-        ganHoanVi(ABCD, tgABCD)
-        #value[ABCD] = tgABCD
-        tgABCD.draw()
-
-def HinhThangCan(ABCD):
-    Var = V()
-    if ABCD in Var: return
-    (A, B, C, D) = map(str, list(ABCD))
-
-    if (A not in Var) and \
-       (B not in Var) and \
-       (C not in Var) and \
-       (D not in Var):    
-        pD = point.Point([-4, -2])
-        dis = random.randint(8, 12)
-        pC = point.Point([pD.x + dis, -2])
-        DC = segment.Segment([pD, pC])
-        dDC = line.convertSegment([DC])
-        ratio1 = random.choice([0.2, 0.3])
-        ratio2 = 1 - ratio1
-        
-        M = point.distanceRatio([DC, ratio1])
-        N = point.distanceRatio([DC, ratio2])
-        d1 = line.combine_1([M, dDC])
-        
-        pA = point.onLine([d1])
-                
-        d2 = line.combine_2([pA, dDC])
-        d1 = line.combine_1([N, dDC])
-        pB = point.intersection([d1, d2])
-
-        pA.name = A
-        pB.name = B
-        pC.name = C
-        pD.name = D
-
-        value[A] = pA
-        value[B] = pB
-        value[C] = pC
-        value[D] = pD        
-
-        tgABCD = fourangle.Fourangle([pA, pB, pC, pD, ABCD])
-        ganHoanVi(ABCD, tgABCD)
-        #value[ABCD] = tgABCD
-        tgABCD.draw()
-
-def HinhThangVuong(ABCD):
-    Var = V()
-    if ABCD in Var: return
-    (A, B, C, D) = map(str, list(ABCD))
-
-    if (A not in Var) and \
-       (B not in Var) and \
-       (C not in Var) and \
-       (D not in Var):
-        ADB = A + D + B
-        tri = TamGiacVuong(ADB, show=0)
-        pA = tri.A
-        pB = tri.B
-        pD = tri.C
-
-        vAB = vector.make_from_two_points(pA, pB)
-        r = 0.6
-        pC = point.Point([pD.x + (1 + r) * vAB.a, pD.y + (1 + r) * vAB.b])
-        
-        pA.name = A
-        pB.name = B
-        pC.name = C
-        pD.name = D
-
-        value[A] = pA
-        value[B] = pB
-        value[C] = pC
-        value[D] = pD        
-
-        tgABCD = fourangle.Fourangle([pA, pB, pC, pD, ABCD])
-        ganHoanVi(ABCD, tgABCD)
-        #value[ABCD] = tgABCD
-        tgABCD.draw()
-
-def HinhBinhHanh(ABCD):
-    Var = V()
-    if ABCD in Var: return
-    (A, B, C, D) = map(str, list(ABCD))
-
-    if (A not in Var) and \
-       (B not in Var) and \
-       (C not in Var) and \
-       (D not in Var):
-        ADB = A + D + B
-        tri = TamGiac([ADB], show=0)
-        pA = tri.A
-        pB = tri.B
-        pD = point.Point([pA.x + random.choice([-3, -4, 3, 4]), \
-                          pA.y + random.choice([-3,-4, 3, 4])])
-        
-        vAB = vector.make_from_two_points(pA, pB)
-        pC = point.Point([pD.x + vAB.a, pD.y + vAB.b])
-        
-        pA.name = A
-        pB.name = B
-        pC.name = C
-        pD.name = D
-
-        value[A] = pA
-        value[B] = pB
-        value[C] = pC
-        value[D] = pD        
-
-        tgABCD = fourangle.Fourangle([pA, pB, pC, pD, ABCD])
-        ganHoanVi(ABCD, tgABCD)
-        #value[ABCD] = tgABCD
-        tgABCD.draw()
+    pH = point.center([pB, pC])
+    pH.name = H
+    value[H] = pH
+    Doan([A + H])
+    pH.draw()
+    return pH
+    
 
 def SmallTamGiacCan(ABC):
     Var = V()
@@ -459,108 +325,6 @@ def SmallTamGiacCan(ABC):
         return tgABC
 
 
-def HinhThoi(ABCD):
-    Var = V()
-    if ABCD in Var: return
-    (A, B, C, D) = map(str, list(ABCD))
-
-    if (A not in Var) and \
-       (B not in Var) and \
-       (C not in Var) and \
-       (D not in Var):
-        ADB = A + D + B
-        tri = SmallTamGiacCan(ADB)
-        pA = tri.A
-        pB = tri.B
-        pD = tri.C
-        
-        M = point.center([pB, pD])
-        pC = point.Point([2 * M.x - pA.x, 2 * M.y - pA.y])
-        
-        pA.name = A
-        pB.name = B
-        pC.name = C
-        pD.name = D
-
-        value[A] = pA
-        value[B] = pB
-        value[C] = pC
-        value[D] = pD        
-
-        tgABCD = fourangle.Fourangle([pA, pB, pC, pD, ABCD])
-
-        ganHoanVi(ABCD, tgABCD)
-
-        #value[ABCD] = tgABCD
-        
-        tgABCD.draw()
-
-        
-def HinhVuong(ABCD):
-    Var = V()
-    if ABCD in Var: return
-    (A, B, C, D) = map(str, list(ABCD))
-
-    if (A not in Var) and \
-       (B not in Var) and \
-       (C not in Var) and \
-       (D not in Var):
-        #ADB = A + D + B
-        #tri = SmallTamGiacVuongCan(ADB)
-        '''pA = tri.A
-        pB = tri.B
-        pD = tri.C'''
-        
-        #M = point.center([pB, pD])
-        #pC = point.Point([2 * M.x - pA.x, 2 * M.y - pA.y])
-        
-        '''pA.name = A
-        pB.name = B
-        pC.name = C
-        pD.name = D'''
-
-        value[A] = point.Point([-4, -4, A])
-        value[B] = point.Point([+4, -4, B])
-        value[C] = point.Point([+4, +4, C])
-        value[D] = point.Point([-4, +4, D])
-
-        tgABCD = fourangle.Fourangle([value[A], value[B], value[C], value[D], ABCD])
-        ganHoanVi(ABCD, tgABCD)
-        #value[ABCD] = tgABCD
-        tgABCD.draw()
-
-def HinhChuNhat(ABCD):
-    Var = V()
-    if ABCD in Var: return
-    (A, B, C, D) = map(str, list(ABCD))
-
-    if (A not in Var) and \
-       (B not in Var) and \
-       (C not in Var) and \
-       (D not in Var):
-        ADB = A + D + B
-        tri = TamGiacVuong(ADB, show=0)
-        pA = tri.A
-        pB = tri.B
-        pD = tri.C
-        
-        M = point.center([pB, pD])
-        pC = point.Point([2 * M.x - pA.x, 2 * M.y - pA.y])
-        
-        pA.name = A
-        pB.name = B
-        pC.name = C
-        pD.name = D
-
-        value[A] = pA
-        value[B] = pB
-        value[C] = pC
-        value[D] = pD        
-
-        tgABCD = fourangle.Fourangle([pA, pB, pC, pD, ABCD])
-        ganHoanVi(ABCD, tgABCD)
-        #value[ABCD] = tgABCD
-        tgABCD.draw()
 
 # [O; R]
 # R is a float of number
@@ -568,6 +332,8 @@ def DuongTron(OR):
     Var = V()
     O = OR[0]
     R = OR[1]
+    print(R)
+    print(O)
     pO = None
     if O not in Var:
         pO = point.rand()
@@ -578,6 +344,17 @@ def DuongTron(OR):
     C = circle.Circle([pO, R])
     C.draw()
 
+def DuongTronNgoaiTiep(L):
+    Var = V()
+    O = L[0]
+    ABC = L[1]
+    if ABC not in Var: return
+    (A, B, C) = list(ABC)
+    TamGiac([ABC])
+    value[O] = circle.through_three([value[A], value[B], value[C]])
+    value[O].name = O
+    value[O].draw()
+    
 def Goc(ABC):
     Var = V()
     (A, B, C) = map(str, list(ABC))
@@ -615,8 +392,7 @@ def Goc(ABC):
         s1.draw()
         s2.draw()
         
-def DoanPhanGiac(L):
-    
+def DoanPhanGiac(L):    
     AH = L[0]
     ABC = L[1]
 
@@ -665,70 +441,26 @@ def DoanPhanGiac(L):
     BH.draw()
     
 
-def TiaPhanGiac(Oz, Ox, Oy):
-    Var = V()
-    O = Oz[0]
-    
-    if Oz in Var: return
-    
-    if (Ox not in Var) or \
-       (Oy not in Var):
-        return 
 
-    if O not in Var: return
-
-    x = Ox[1]
-    y = Oy[1]
-    z = Oz[1]
-    
-    vx = value[x]
-    vy = value[y]
-
-    pO = value[O]
-
-    size1 = vector.size(vx)
-    size2 = vector.size(vy)
-    
-    r1 = 0.5 / size1
-    r2 = 0.5 / size2
-    
-    pA = point.Point([pO.x + vx.a * r1, pO.y + vx.b * r1])
-    pC = point.Point([pO.x + vy.a * r2, pO.y + vy.b * r2])
-    pA.drawn = pC.drawn = True
-
-    M = point.center([pA, pC])
-    vz = vector.make_from_two_points(pO, M)
-    vz.name = z
-    value[z] = vz
-    rayOz = ray.Ray([pO, vz, Oz])
-    rayOz.draw()
-    value[Oz] = rayOz
-
-
-def QuaMotDiemVaSongSongVoiDuong(L1, P, L2):
+def QuaMotDiemVaSongSongVoiDuong(L):
+    (P, L1, L2) = L
     Var = V()
     if L1 in Var: return
-    if L2 not in Var:
-        # if L is 'dAB'
-        if L2[1].isupper():
-            AB = L2[1 : ]
-            doanAB = Doan(AB)
-            L = line.convertSegment([doanAB])
-            value[L1] = L
-            L.draw()
-        else: return
-    L2 = L2[1 : ]
+    if L2 not in Var: return        
     L = line.combine_2([value[P], value[L2]])
     value[L1] = L
     L.draw()
 
-def QuaMotDiemVaSongSongVoiDoan(L1, P, L2):
+def QuaMotDiemVaSongSongVoiDoan(L):
     Var = V()
-    if L1 in Var: return
+    
+    (P, L1, L2) = L
+    
     if P not in Var: return
-    if L2 not in Var:
-        AB = L2
-        doanAB = Doan(AB)
+
+    if L2 not in Var: 
+        AB = L2        
+        doanAB = Doan([AB])
         L = line.convertSegment([doanAB])
         value[L2] = L
         L = line.combine_2([value[P], L])
@@ -739,6 +471,29 @@ def QuaMotDiemVaSongSongVoiDoan(L1, P, L2):
     value[L1] = L
     L.draw()
 
+# L = [P, seg]
+# duong thang d qua P va vuong goc voi seg
+
+def QuaMotDiemVuongGocVoiDuong(L, show=1):
+    Var = V()
+    (P, L1, L2) = L
+    if P not in Var: return
+    if L2 not in Var: return
+    d = line.combine_1([value[P], value[L2]])
+    value[L1] = d
+    if show == 1: d.draw()
+    return d
+
+def QuaMotDiemVuongGocVoiDoan(L, show=1):
+    Var = V()
+    (P, L1, S) = L
+    if P not in Var: return
+    if S not in Var: value[S] = Doan([S])
+    d2 = line.convertSegment([value[S]])
+    d = line.combine_1([value[P], d2])
+    value[L1] = d
+    if show == 1: d.draw()
+    return d
 ############################################################
 ############################################################
 ########################### Minh ###########################
@@ -748,13 +503,14 @@ def QuaMotDiemVaSongSongVoiDoan(L1, P, L2):
 # PHan Doan - Doan
 # VD List A
 # M, AB
-def TrungDiem(M, AB):
+def TrungDiem(L):
     Var = V()
+    M = L[0]
+    AB = L[1]
     (A, B) = list(AB)
     if A not in Var: return
     if B not in Var: return
-    if AB not in Var:
-        Doan(AB)
+    if AB not in Var: Doan([AB])
         
     pA = value[A]
     pB = value[B]
@@ -775,7 +531,7 @@ def NamGiua(L):
     M = L[0]
     AB = L[1]
 
-    if AB not in Var: return
+    if AB not in Var: value[AB] = Doan([AB])
     
     AB = value[AB]
     
@@ -787,139 +543,36 @@ def NamGiua(L):
     
     pM.draw()
 
-def KhongNamGiua(L):    
-    Var = V()
-    M = L[0]
-    AB = L[1]
 
-    if AB not in Var: return
-    
-    AB = value[AB]
-    
-    k = random.choice([1.25, 1.5, 1.75, 2, 2.25])
-    
-    pM = point.distanceRatio([AB, k])
-    pM.name = M
-    
-    value[M] = pM
-    pM.draw()
 # vd Giaodiem(ABCDE) nghia la A la giao diem BC DE
 # L = [M, AB, CD]
 def GiaoDiemDoan(L):
+
     Var = V()
     M = L[0]
     AB = L[1]
     CD = L[2]
+    (A, B) = list(AB)
+    (C, D) = list(CD)
 
-    if AB not in Var: return
-    if CD not in Var: return
+    if M in Var: return
     
-    d1 = line.convertSegment([value[AB]])
-    d2 = line.convertSegment([value[CD]])
+    d1 = line.convertSegment([segment.Segment([value[A], value[B]])])
+    d2 = line.convertSegment([segment.Segment([value[C], value[D]])])
     pM = point.intersection([d1, d2])
     pM.name = M
     value[M]= pM
+    if mathfunctions.intersect(value[M], [segment.Segment([value[A], value[B]]), \
+                                          segment.Segment([value[C], value[D]])]) == False:
+             seg_MA = segment.Segment([value[M], value[A]])
+             seg_MC = segment.Segment([value[C], value[M]])
+             seg_MB = segment.Segment([value[M], value[B]])
+             seg_MD = segment.Segment([value[D], value[M]])
+             seg_MA.draw()
+             seg_MC.draw()
+             seg_MB.draw()
+             seg_MD.draw()
     pM.draw()
-
-
-def ThuocDuongTron(a):
-    Var = V()
-    if a[1] not in Var: return
-    C1 = value[a[1]]
-    M = point.onCircle([C1])
-    M.name = a[0]
-    value[a[0]] = M
-    M.draw()
-#   a = ["M","(O,R)"]
-def NgoaiDuongTron(a):
-    Var = V()
-    if a[1] not in Var: return
-    if a[0] in Var: return 
-    C1 = value[a[1]]
-    Temp = point.onCircle([C1])
-    M = point.pos_point([C1.O,Temp])
-    M.name = a[0]
-    value[a[0]] = M
-    M.draw()
-# Vd Tieptuyen(["AB","C1")
-def TiepTuyen(a):
-    Var = V()
-    if a[1] not  in Var: return
-    if a[0][0]  in Var: return
-    if a[0][1] in Var: return 
-    C1 = value[a[1]]
-    value[a[0][0]] = point.onCircle([C1])
-    value[a[0][0]].name = a[0][0]
-    value[a[0][0]].draw()
-    S1 = segment.Segment([C1.O,value[a[0][0]]])
-    Line1 = line.convertSegment([S1])
-    Line2 = line.combine_1([value[a[0][0]],Line1])
-    value[a[0][1]] =point.onLine([Line2])
-    value[a[0][1]].name = a[0][1]
-    value[a[0][1]].draw()
-    value[a[0]] = segment.Segment([value[a[0][0]],value[a[0][1]]])
-    value[a[0]].name = a[0]
-    value[a[0]].draw()
-#vd Daycung(["AC","C1"'
-def DayCung(a):
-    Var = V()
-    if a[1] not  in Var: return
-    if a[0][0]  in Var: return
-    if a[0][1] in Var: return
-    C1 = value[a[1]]
-    value[a[0][0]] = point.onCircle([C1])
-    value[a[0][1]] = point.onCircle([C1])
-    while(value[a[0][0]] == value[a[0][1]]):
-        value[a[0][1]] = point.onCircle([C1])
-    value[a[0][0]].name = a[0][0]
-    value[a[0][0]].draw()
-    value[a[0][1]].name = a[0][1]
-    value[a[0][1]].draw()
-    S1 = segment.Segment([value[a[0][0]],value[a[0][1]]])
-    value[a[0]] = S1
-    value[a[0]].name = a[0]
-    value[a[0]].draw()
-# DuongKinh((["AC","C1")
-def DuongKinh(a):
-    Var = V()
-    if a[1] not in Var: return
-    if a[0][0]  in Var: return
-    if a[0][1] in Var: return
-    C1 = value[a[1]]
-    value[a[0][0]] = point.onCircle([C1])
-    value[a[0][0]].name = a[0][0]
-    value[a[0][0]].draw()
-    value[a[0][1]] = point.pos_point([value[a[0][0]],C1.O])
-    value[a[0][1]].name = a[0][1]
-    value[a[0][1]].draw()
-    S1 = segment.Segment([value[a[0][0]],value[a[0][1]]])
-    value[a[0]] = S1
-    value[a[0]].name = a[0]
-    value[a[0]].draw()
-
-#vd GiaoDiemDuongTron_Doan("M","EF","C1")
-def GiaoDiemDuongTron_Doan(a):
-    Var = V()
-    if a[2] not in Var: return
-    if a[1][0] in Var: return
-    if a[1][1] in Var: return
-    if a[0] in Var: return
-    C1 = value[a[2]]
-    value[a[0]] = point.onCircle([C1])
-    value[a[0]].name = a[0]
-    value[a[0]].draw()
-    S1 = segment.Segment([C1.O,value[a[0]]])
-    Line1 = line.convertSegment([S1])
-    Line2 = line.combine_1([value[a[0]],Line1])
-    value[a[1][0]] =point.onLine([Line2])
-    value[a[1][0]].name = a[1][0]
-    value[a[1][0]].draw()
-    value[a[1][1]] = point.pos_point([value[a[1][0]],value[a[0][0]]])
-    value[a[1][1]].name = a[1][1]
-    value[a[1][1]].draw()
-    value[a[1]]= segment.Segment([value[a[1][0]],value[a[1][1]]])
-    value[a[1]].name= a[1]
-    value[a[1]].draw()
 
 ############################################################
 ############################################################
@@ -927,12 +580,13 @@ def GiaoDiemDuongTron_Doan(a):
 ############################################################
 ############################################################
 
-def DiemNamGiuaHaiDiem(MNP):
+def DiemNamGiuaHaiDiem(L):
     Var = V()
-    if MNP in Var: return
-    M = MNP[0]
-    N = MNP[1]
-    P = MNP[2]
+    
+    M = L[0]
+    NP = L[1]
+    
+    (N, P) = map(str, list(NP))
     if N not in Var:
         value[N] = point.rand()
         value[N].name = N
@@ -946,46 +600,29 @@ def DiemNamGiuaHaiDiem(MNP):
     value[M].name = M
     value[M].draw()
 
-def BaDiemThangHang(SRA):
+def DiemTrongTamGiac(L):
+    O = L[0]
+    ABC = L[1]
     Var = V()
-    if SRA in Var: return
-    S = SRA[0]
-    R = SRA[1]
-    A = SRA[2]
-    if S not in Var:
-        value[S] = point.rand()
-        value[S].name = S
-        value[S].draw()
-    if R not in Var:
-        value[R] = point.rand()
-        value[R].name = R
-        value[R].draw()
-    seg = segment.Segment([value[S], value[R]])
-    ln = line.convertSegment([seg])
-    value[A] = point.onLine([ln])
-    value[A].name = A
-    value[A].draw()
+    if O in Var: return
+    value[O] = point.insideTriangle([value[ABC]])
+    value[O].name = O
+    value[O].draw()
 
-def BaDiemKhongThangHang(SRA):
+def DiemNgoaiTamGiac(L):
+    O = L[0]
+    ABC = L[1]
     Var = V()
-    if SRA in Var: return
-    S = SRA[0]
-    R = SRA[1]
-    A = SRA[2]
-    if S not in Var:
-        value[S] = point.rand()
-        value[S].name = S
-        value[S].draw()
-    if R not in Var:
-        value[R] = point.rand()
-        value[R].name = R
-        value[R].draw()
-    value[A] = point.combine_triangle([value[S], value[R]])
-    value[A].name = A
-    value[A].draw()
+    if O in Var: return
+    value[O] = point.outsideTriangle([value[ABC]])
+    value[O].name = O
+    value[O].draw()
+    
 
-def DiemThuocDuongThang(M,d):
+def DiemThuocDuongThang(L):
     Var = V()
+    M = L[0]
+    d = L[1]
     if (M in Var) and (d in Var): return
     if d not in Var:
         value[d] = line.rand()
@@ -993,58 +630,93 @@ def DiemThuocDuongThang(M,d):
         value[d].draw()
     value[M] = point.onLine([value[d]])
     value[M].name = M
-    value[M].draw()
+    value[M].draw()        
 
-def DiemKhongThuocDuongThang(M, d):
+def HaiDoanThangSongSong(L):
     Var = V()
-    if M in  Var and d in Var: return
-    if d not in Var:
-        value[d] = line.rand()
-        value[d].name = d
-        value[d].draw()
-    Temp = point.onLine([value[d]])
-    Temp1 = point.onLine([value[d]])
-    value[M] = point.combine_triangle([Temp, Temp1])
-    value[M].name = M
-    value[M].draw()
+    AB = L[1]
+    CD = L[0]
+    if AB in Var: return
+    if CD in Var: return
+    (A, B) = map(str, list(AB))
+    (C, D) = map(str, list(CD))
+    if A not in Var:
+        value[A] = point.rand()
+        value[A].name = A
+    if B not in Var:
+        value[B] = point.rand()
+        value[B].name = B
+    if C not in Var:
+        value[C] = point.rand()
+        value[C].name = C
+    if D in Var: return
+            
+    seg_AB = segment.Segment([value[A], value[B]])
+    value[AB] = seg_AB
+    ln_AB = line.convertSegment([seg_AB])
+    ln_CD = line.combine_2([value[C], ln_AB])
+    value[D] = point.onLine([ln_CD])
+    value[D].name = D
+    seg_CD = segment.Segment([value[C], value[D]])
+    value[CD] = seg_CD
+    seg_AB.draw()
+    seg_CD.draw()
 
-def DuongCaoTuGiac(H, ABCD):
+def HaiDoanThangVuongGoc(L):
     Var = V()
+    CD = L[0]
+    AB = L[1]
+    if AB in Var: return
+    if CD in Var: return
+    (A, B) = map(str, list(AB))
+    (C, D) = map(str, list(CD))
+    if A not in Var:
+        value[A] = point.rand()
+        value[A].name = A
+    if B not in Var:
+        value[B] = point.rand()
+        value[B].name = B
+    if C not in Var:
+        value[C] = point.combine_triangle([value[A], value[B]])
+        value[C].name = C
+    seg_AB = segment.Segment([value[A], value[B]])
+    value[AB] = seg_AB
+    lnAB = line.convertSegment([seg_AB])
+    lnCD = line.combine_1([value[C], lnAB])
+    value[D] = point.intersection([lnAB, lnCD])
+    value[D].name = D
+    seg_CD = segment.Segment([value[C], value[D]])
+    value[CD] = seg_CD
+    if mathfunctions.checkIntersect([value[D], seg_AB]) == False:
+        seg_DA = segment.Segment([value[A], value[D]])
+        seg_DA.draw()
+    seg_AB.draw()
+    seg_CD.draw()
+        
+def TrongTam(L):
+    Var = V()
+    E = L[0]
+    ACK = L[1]
+    if E in Var: return
+    if ACK not in Var: return
 
-    if H in Var: return
-    if ABCD not in Var: return
+    (A, C, K) = list(ACK)
+    pn_B = point.center([value[C], value[K]])
+    pn_D = point.center([value[A], value[K]])
     
-    (A, B, C, D) = map(str, list(ABCD))
+    seg_AB = segment.Segment([value[A], pn_B])
     
-    dCD = line.convertSegment([segment.Segment([value[C], value[D]])])
-                              
-    d = line.combine_1([value[A], dCD])
-                              
-    value[H] = point.intersection([dCD, d])
-    value[H].name = H
-                              
-    AH = segment.Segment([value[A], value[H]])
-    AH.name = A + H
-
-    value[AH.name] = AH
-
-    CH = segment.Segment([value[C], value[H]])
-    CH.name = C + H
-    DH = segment.Segment([value[D], value[H]])
-    DH.name = D + H
-
-    Goc(A + H + C)
-    if not mathfunctions.checkInSegment(value[H], \
-                                        segment.Segment([value[C], value[D]])):
-        CH.draw()
-    AH.draw()
-
-################################################
+    seg_CD = segment.Segment([value[C], pn_D])
     
-################################################
-# AH la duong cao tam giac ABC
+    ln_AB = line.convertSegment([seg_AB])
+    ln_CD = line.convertSegment([seg_CD])
+    value[E] = point.intersection([ln_AB, ln_CD])
+    value[E].name = E
+    value[E].draw()
+    ln_AB.draw()
+    ln_CD.draw()
+
 def DuongCaoTamGiac(L):
-
     AH = L[0]
     ABC = L[1]
 
@@ -1055,7 +727,7 @@ def DuongCaoTamGiac(L):
     
     Var = V()
     if H in Var: return
-    (A, B, C) = map(str, list(ABC))
+    (A, B, C) = list(ABC)
     if (A not in Var) or \
        (B not in Var) or \
        (C not in Var):
@@ -1085,225 +757,40 @@ def DuongCaoTamGiac(L):
         CH = segment.Segment([value[C], value[H]])
         BH.draw()
         CH.draw()
-# H la chan duong cao ha tu A cua Tam giac ABC
-def DuongCaoTamGiac2(L):
+    return AH
+
+def TrucTam(L):
+    Var = V()
     H = L[0]
-    A = L[1]
-    ABC = L[2]
-
-    return DuongCaoTamGiac([A + H, ABC])
-##############################################################
-        
-
-def DiemThuocTia(M, Ox):
-    Var = V()
-    if M in Var: return
-                              
-    O = Ox[0]
-    x = Ox[1]
-
-    if O not in Var:
-        value[O] = point.rand()
-        value[O].name = O
-    if x not in Var:
-        value[x] = vector.rand()
-        value[x].name = x
-
-    rayOx = ray.Ray([value[O], value[x]])
-    segOx = segment.convertRay([rayOx])
-                              
-    value[M] = point.onSegment([segOx])
-    value[M].name = M
-    value[M].draw()
-    rayOx.draw()
-
-def GiaoDiemHaiTia(M, Ox, Ty):
-    Var = V()
-    if M in Var: return
-    O = Ox[0]
-    x = Ox[1]
-    T = Ty[0]
-    y = Ty[1]
-    # neu O chua co, thi tao 
-    if O not in Var:
-        value[O] = point.rand()
-        value[O].name = O
-    if x not in Var:
-        value[x] = vector.rand()
-        value[x].name = x
-    if T not in Var:
-        value[T] = point.rand()
-        value[T].name = T
-    if y not in Var:
-        value[y] = vector.rand()
-        value[y].name = y
-
-    if Ox not in Var:
-        rayOx = ray.Ray([value[O], value[x]])
-    else:
-        rayOx = value[Ox]
-    if Ty not in Var:
-        rayTy = ray.Ray([value[T], value[y]])
-    else:
-        rayTy = value[Ty]
-
-    lnOx = line.convertRay([rayOx])
-    lnTy = line.convertRay([rayTy])
-
-    pM = point.intersection([lnOx, lnTy])    
-
-    if mathfunctions.checkInRay(pM, rayOx) and \
-       mathfunctions.checkInRay(pM, rayTy):    
-        value[M] = pM
-        value[M].name = M
-        value[M].draw()
-        rayOx.inscreaseSize(pM)
-        rayTy.inscreaseSize(pM)
-
-    rayOx.draw()
-    rayTy.draw()
+    ABC = L[1]
     
-def GiaoDiemTiaDoan(M, Ox, AB):
-    Var = V()
-    if Ox in Var and AB in Var: return
-    (O, x) = map(str, list(Ox))
-    (A, B) = map(str, list(AB))
-    if O not in Var:
-        value[O] = point.rand()
-        value[O].name = O
-    if x not in Var:
-        value[x] = vector.rand()
-        value[x].name = x
-    if A not in Var:
-        value[A] = point.rand()
-        value[A].name = A
-    if B not in Var:
-        value[B] = point.rand()
-        value[B].name = B
-    ray_Ox = ray.Ray([value[O], value[x]])
-    seg_AB = segment.Segment([value[A], value[B]])
-    ln_Ox = line.convertRay([ray_Ox])
-    ln_AB = line.convertSegment([seg_AB])
-    value[M] = point.intersection([ln_Ox, ln_AB])
-    value[M].name = M
-    seg_Ox = segment.convertRay([ray_Ox])
-    if mathfunctions.intersect(value[M], [seg_Ox , seg_AB]) == True:
-        value[M].draw()
-    ray_Ox.draw()
-    seg_AB.draw()
+    if H in Var: return
+    if ABC not in Var: return
 
-def HaiDoanThangSongSong(AB, CD):
-    Var = V()
-    if AB in Var and CD in Var: return
-    (A, B) = map(str, list(AB))
-    (C, D) = map(str, list(CD))
-    if A not in Var:
-        value[A] = point.rand()
-        value[A].name = A
-    if B not in Var:
-        value[B] = point.rand()
-        value[B].name = B
-    if C not in Var:
-        value[C] = point.rand()
-        value[C].name = C
-    seg_AB = segment.Segment([value[A], value[B]])
-    value[AB] = seg_AB
-    ln_AB = line.convertSegment([seg_AB])
-    ln_CD = line.combine_2([value[C], ln_AB])
-    value[D] = point.onLine([ln_CD])
-    value[D].name = D
-    seg_CD = segment.Segment([value[C], value[D]])
-    value[CD] = seg_CD
-    seg_AB.draw()
-    seg_CD.draw()
+    (A, B, C) = list(ABC)
+    BC = B + C
+    AC = A + C
+    d1 = QuaMotDiemVuongGocVoiDoan(['d' + str(random.random()), A, BC])
+    d2 = QuaMotDiemVuongGocVoiDoan(['d' + str(random.random()), B, AC])
 
-def HaiDoanThangVuongGoc(AB, CD):
-    Var = V()
-    if AB in Var and CD in Var: return
-    (A, B) = map(str, list(AB))
-    (C, D) = map(str, list(CD))
-    if A not in Var:
-        value[A] = point.rand()
-        value[A].name = A
-    if B not in Var:
-        value[B] = point.rand()
-        value[B].name = B
-    seg_AB = segment.Segment([value[A], value[B]])
-    value[AB] = seg_AB
-    lnAB = line.convertSegment([seg_AB])
-    value[C] = point.combine_triangle([value[A], value[B]])
-    value[C].name = C
-    lnCD = line.combine_1([value[C], lnAB])
-    value[D] = point.onLine([lnCD])
-    value[D].name = D
-    seg_CD = segment.Segment([value[C], value[D]])
-    value[CD] = seg_CD
-    seg_AB.draw()
-    seg_CD.draw()
-        
-def HaiDoanThangBangNhau(AB, CD):
-    Var = V()
-    if AB in Var and CD in Var: return
-    (A, B) = map(str, list(AB))
-    (C, D) = map(str, list(CD))
-    if A not in Var:
-        value[A] = point.rand()
-        value[A].name = A
-    if B not in Var:
-        value[B] = point.rand()
-        value[B].name = B
-    if C not in Var:
-        value[C] = point.rand()
-        value[C].name = C
-    kc_AB = mathfunctions.distance([value[A], value[B]])
-    value[D] = point.combine_3([value[C], kc_AB])
-    value[D].name = D
-    seg_AB = segment.Segment([value[A], value[B]])
-    value[AB] = seg_AB
-    seg_CD = segment.Segment([value[C], value[D]])
-    value[CD] = seg_CD
-    seg_AB.draw()
-    seg_CD.draw()
+    pH = point.intersection([d1, d2])
+    pH.name = H
+    value[H] = pH
+    pH.draw()
+    
 
-def GiaoDiemHaiDoan(E, AB, CD):
-    Var = V()
-    if AB not in Var and CD not in Var: return
-    (A, B) = map(str, list(AB))
-    (C, D) = map(str, list(CD))
-    if A not in Var:
-        value[A] = point.rand()
-        value[A].name = A
-    if B not in Var:
-        value[B] = point.rand()
-        value[B].name = B
-    if C not in Var:
-        value[C] = point.rand()
-        value[C].name = C
-    if D not in Var:
-        value[D] = point.rand()
-        value[D].name = D
-    seg_AB = segment.Segment([value[A], value[B]])
-    value[AB] = seg_AB
-    seg_CD = segment.Segment([value[C], value[D]])
-    value[CD] = seg_CD
-    ln_AB = line.convertSegment([seg_AB])
-    ln_CD = line.convertSegment([seg_CD])
-    value[E] = point.intersection([ln_AB, ln_CD])
-    value[E].name = E
-    if mathfunctions.checkInSegment(value[E], seg_AB):
-        value[E].draw()
-    seg_AB.draw()
-    seg_CD.draw()
 ##############################################
-def GiaoDiemDuongDoan(I, d, AB):
+# I la giao diem cua duong thang d va doan AB
+def GiaoDiemDuongDoan(L):
     Var = V()
+    (I, d, AB) = L
     if I in Var: return
-    if d not in Var: return
+    if d not in Var: return    
     if AB not in Var:
         (A, B) = list(AB)
         if (A not in Var) or \
            (B not in Var): return
-        doanAB = Doan(AB)
+        value[AB] = Doan([AB])
         
     L = line.convertSegment([value[AB]])
     pI = point.intersection([value[d], L])
@@ -1311,69 +798,41 @@ def GiaoDiemDuongDoan(I, d, AB):
     value[I] = pI
     pI.draw()
 
-def GiaoDiemHaiDuongCheoTuGiac(O, ABCD):
-    (A, B, C, D) = list(ABCD)
-    AC = A + C
-    BD = B + D
-    GiaoDiemHaiDoan(O, AC, BD)
-
-def GiaoDiemHaiDuong(I, d1, d2):
+def GiaoDiemHaiDuong(L):
+    I = L[0]
+    d1 = L[1]
+    d2 = L[2]
     pI = point.intersection([value[d1], value[d2]])
     pI.name = I
     value[I] = pI
     pI.draw()
+    
+# Điểm đối xứng qua cạnh
+# vẽ M đối xứng với N qua cạnh AB
+def DoiXungQuaCanh(L):
+    Var = V()
+    (M, N, AB) = L
+    if AB not in Var: value[AB] = Doan([AB])
+    if N not in Var: return
+    if M in Var: return
+    value[M] = point.pos_line([value[N], line.convertSegment([value[AB]])])
+    value[M].name = M
+    value[M].draw()
 ###############################################
-def TiaNamGiuaHaiTia(Oxzy):
-    Var = V()
-    if Ox in Var and Oy in Var: return
-    (O, x, z, y) = map(str, list(Oxzy))
-    if O not in Var:
-        value[O] = point.rand()
-        value[O].name = O
-    if x not in Var:
-        value[x] = vector.rand()
-        value[x].name = x
-    if y not in Var:
-        value[y] = vector.rand()
-        value[y].name = y
-    ray_Ox = ray.Ray([value[O], value[x]])
-    value[Ox] = ray_Ox
-    ray_Oy = ray.Ray([value[O], value[y]])
-    value[Oy] = ray_Oy
-    angle_Oxy = angle.Angle([ray_Ox, ray_Oy])
-    pn = point.insideAngle([angle_Oxy])
-    value[z] = vector.make_from_two_points(value[O], pn)
-    value[z].name = z
-    ray_Oz = ray.Ray([value[O], value[z]])
 
-    ray_Ox.draw()
-    ray_Oy.draw()
-    ray_Oz.draw()
-
-def HaiTiaDoiNhau(Oxy):
-    Var = V()
-    if Ox in Var and Oy in Var: return
-    (O, x, y) = map(str, list(Oxy))
-    if O not in Var:
-        value[O] = point.rand()
-        value[O].name = O
-    if x not in Var:
-        value[x] = vector.rand()
-        value[x].name = x
-    ray_Ox = ray.Ray([value[O], value[x]])
-    value[Ox] = ray_Ox
-    seg_Ox = segment.convertRay([ray_Ox])
-    pn_Ox = point.onSegment([seg_Ox])
-    pn_Oy = point.pos_point([value[O], pn_Ox])
-    value[y] = vector.make_from_two_points(pn_Oy, value[O])
-    value[y].name = y
-    ray_Oy = ray.Ray([value[O], value[y]])
-    value[Oy] = ray_Oy
-    ray_Ox.draw()
-    ray_Oy.draw()
-
-
-HinhChuNhat('ABCD')
-
-
-
+#TamGiac(['ABC'])
+#QuaMotDiemVuongGocVoiDoan(['d', 'A', 'AB'])
+#GiaoDiemDuongDoan(['I', 'd', 'AB'])
+#TrucTam(['H', 'ABC'])
+#DuongCaoTamGiac(['AH', 'BAC'])
+#DoiXungQuaCanh(['K', 'A', 'BC'])
+#TrongTam(['G', 'ACB'])
+#QuaMotDiemVaSongSongVoiDoan(['d1', 'B', 'AC'])
+#QuaMotDiemVuongGocVoiDoan(['d2', 'A', 'AB'])
+#DoanTrungBinh(['MN', 'BCA', 'C'])
+#TrungTuyen(['CM', 'A])
+#DuongTronNgoaiTiep(['O', 'ABC'])
+#DoanPhanGiac(['CK', 'ABC'])
+#DiemThuocDuongThang(['N', 'd1'])
+#Doan(['MN'])
+    

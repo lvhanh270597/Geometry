@@ -25,7 +25,7 @@ class Segment(object):
     def __str__(self):
         return "(" + str(self.begin) + ", " + str(self.end) + ")"    
        
-def rand():
+def rand(L=None):
 	a = point.rand()
 	b = point.rand()
 	return Segment(a, b)
