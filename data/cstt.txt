@@ -91,8 +91,8 @@ diem
 doan thang
 3
 goi
-la giao diem cua
-va
+la giao diem cua doan thang
+va doan thang
 diem
 doan thang
 doan thang
@@ -157,3 +157,10 @@ qua
 diem
 diem
 doan thang
+3
+goi
+diem doi xung voi
+qua
+diem
+diem
+diem

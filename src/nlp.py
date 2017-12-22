@@ -8,11 +8,11 @@ data_train = []
 
 
 def getBigrams(v):
-    n = len(v)
+    '''n = len(v)
     res = []
     for i in range(n - 1):
-        res.append((v[i], v[i + 1]))
-    return res
+        res.append((v[i], v[i + 1]))'''
+    return v
 
 def loadData(fpath):
     global dictionary
@@ -21,24 +21,21 @@ def loadData(fpath):
     sentences = []
     for i in range(num):
         ###################################################
-        n_des = int(f.readline())
-        des = []
-        for j in range(n_des):
-            s = f.readline()
-            des.append(s[ : len(s) - 1])
-        ###################################################
-        tys = []
-        for j in range(n_des):
-            s = f.readline()
-            tys.append(s[ : len(s) - 1])
         sentence = ''
+        n_des = int(f.readline())        
         for j in range(n_des):
-            sentence = des[j] + ' ___ '
+            s = f.readline()
+            sentence += s[ : len(s) - 1] + ' ____ '
+        ###################################################     
+        for j in range(n_des):
+            s = f.readline()
+            sentence += s[ : len(s) - 1] + ' '                   
         ###### Making dictionary ######
         _v = getBigrams(sentence.split())
         for u in _v:
             if u not in dictionary:
                 dictionary.append(u)        
+        ###################################################        
         ###############################
         sentences.append(sentence)
 
@@ -53,8 +50,9 @@ def getVectorOfWords(sentence):
     V = sentence.split()
     vectorOfWords = []
     for v in V:
-        if know.getType(v) != None:
-            vectorOfWords.append('___')
+        Type = know.getType(v)
+        if Type != None:
+            vectorOfWords += Type.split()
         else:
             vectorOfWords.append(v)
     #print(vectorOfWords)
@@ -71,8 +69,11 @@ def getVectorOfWeight(sentence):
     #print(w)
     return w
 
-def getTheSame(sentence):
-    w = getVectorOfWeight(sentence)    
+def getTheSame(sentence):    
+    w = getVectorOfWeight(sentence)  
+    # khong tim thay
+    if sum(w) == 0: return None  
+    ##############
     n = len(data_train)
     #print(data_train)
     L = [(cosine(w, data_train[i]), i) for i in range(n)]

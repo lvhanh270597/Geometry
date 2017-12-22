@@ -34,7 +34,8 @@ ListOfFunctions = [
 	fc.TrucTam,
 	fc.GiaoDiemDuongDoan,
 	fc.GiaoDiemHaiDuong,
-	fc.DoiXungQuaCanh
+	fc.DoiXungQuaCanh,
+	fc.DoiXungQuaDiem
 ]
 
 
@@ -88,6 +89,10 @@ class ChatBot(object):
 		while True:
 			sentence = input('Nhập một câu (không dấu): ')
 			L = nlp.getTheSame(sentence)
+			# khong tim thay
+			if L == None:
+				print('Tôi chưa hiểu ý bạn. Xin thử lại với câu khác.')
+				continue
 			args = nlp.getNames(sentence)
 			found = False
 			func = None

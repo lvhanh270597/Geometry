@@ -454,22 +454,16 @@ def QuaMotDiemVaSongSongVoiDuong(L):
 def QuaMotDiemVaSongSongVoiDoan(L):
     Var = V()
     
-    (P, L1, L2) = L
+    (P, L1, S) = L
     
     if P not in Var: return
-
-    if L2 not in Var: 
-        AB = L2        
-        doanAB = Doan([AB])
-        L = line.convertSegment([doanAB])
-        value[L2] = L
-        L = line.combine_2([value[P], L])
-        value[L1] = L
-        L.draw()
-        return
-    L = line.combine_2([value[P], value[L2]])
-    value[L1] = L
-    L.draw()
+    if L1 in Var: return
+    if S not in Var: value[S] = Doan([S])        
+    
+    ln = line.convertSegment([value[S]])    
+    d = line.combine_2([value[P], ln])
+    value[L1] = d
+    d.draw()    
 
 # L = [P, seg]
 # duong thang d qua P va vuong goc voi seg
@@ -487,8 +481,10 @@ def QuaMotDiemVuongGocVoiDuong(L, show=1):
 def QuaMotDiemVuongGocVoiDoan(L, show=1):
     Var = V()
     (P, L1, S) = L
-    if P not in Var: return
+    if P not in Var: return       
+    print(S)
     if S not in Var: value[S] = Doan([S])
+    
     d2 = line.convertSegment([value[S]])
     d = line.combine_1([value[P], d2])
     value[L1] = d
@@ -556,6 +552,8 @@ def GiaoDiemDoan(L):
     (C, D) = list(CD)
 
     if M in Var: return
+    if AB not in Var: value[AB] = Doan([AB])
+    if CD not in Var: value[CD] = Doan([CD])
     
     d1 = line.convertSegment([segment.Segment([value[A], value[B]])])
     d2 = line.convertSegment([segment.Segment([value[C], value[D]])])
@@ -770,8 +768,8 @@ def TrucTam(L):
     (A, B, C) = list(ABC)
     BC = B + C
     AC = A + C
-    d1 = QuaMotDiemVuongGocVoiDoan(['d' + str(random.random()), A, BC])
-    d2 = QuaMotDiemVuongGocVoiDoan(['d' + str(random.random()), B, AC])
+    d1 = QuaMotDiemVuongGocVoiDoan([A, 'd' + str(random.random()), BC])
+    d2 = QuaMotDiemVuongGocVoiDoan([B, 'd' + str(random.random()), AC])
 
     pH = point.intersection([d1, d2])
     pH.name = H
@@ -818,8 +816,20 @@ def DoiXungQuaCanh(L):
     value[M] = point.pos_line([value[N], line.convertSegment([value[AB]])])
     value[M].name = M
     value[M].draw()
-###############################################
 
+def DoiXungQuaDiem(L):
+    Var = V()
+    (M, N, O) = L
+    if N not in Var: return
+    if O not in Var: return
+    if M in Var: return
+    value[M] = point.pos_point([value[N], value[O]])
+    value[M].name = M
+    value[M].draw()
+
+
+
+###############################################
 #TamGiac(['ABC'])
 #QuaMotDiemVuongGocVoiDoan(['d', 'A', 'AB'])
 #GiaoDiemDuongDoan(['I', 'd', 'AB'])
