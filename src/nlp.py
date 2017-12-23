@@ -6,6 +6,7 @@ from sklearn.svm import LinearSVC
 
 dictionary = []
 sentences = []
+templates = []
 X = []
 y = []
 limited_list = {}
@@ -19,36 +20,49 @@ def getBigrams(v):
         res.append((v[i], v[i + 1]))'''
     return v
 
-def loadData(fpath):
-    f = open(fpath)
+def loadData():
+    f = open('../data/data.txt', 'r')
     num = int(f.readline())
     for i in range(num):
-        ###################################################
+    ###############################################################################
         sentence = f.readline()        
         category = f.readline()
         category = category[ : len(category) - 1]
         sentence = sentence[ : len(sentence) - 1] 
+    #################################MAKING-DICTIONARY#############################
         v = getVectorOfWords(sentence)
         for u in v:
             if u not in dictionary:
                 dictionary.append(u)  
         sentence = ' '.join(v)
-        ###################################################     
+    ################################################################################
+        sentences.append(sentence)
+        y.append(category)
+    f.close()    
+    ####################################READ CATEGORIES#############################
+    f = open('../data/categories.txt', 'r')
+    num = int(f.readline())
+    for i in range(num):
+        category = f.readline()
+        category = category[ : len(category) - 1]
+        
         if category not in limited_list.keys():
             limited_list[category] = [i]
         else:
             limited_list[category].append(i)
-        ###############################
-        sentences.append(sentence)
-        y.append(category)
-
-
-    ################## Making data ###################    
-    dictionary.append('unknown')
+    f.close()
+    #####################################MAKING DATA#################################        
     for sentence in sentences:        
-        X.append(getVectorOfWeight(sentence))
-    print(dictionary)
-    print(limited_list)
+        X.append(getVectorOfWeight(sentence))    
+    #####################################MAKING TEMPLATEs############################
+    f = open('../data/templates.txt', 'r')
+    sentences.clear()
+    num = int(f.readline())
+    for i in range(num):
+        sentence = f.readline()
+        sentence = sentence[ : len(sentence) - 1]
+        templates.append(getVectorOfWeight(sentence))    
+        sentences.append(sentence)
 
 def learnData():
     global clf
@@ -57,35 +71,33 @@ def learnData():
 
 def getVectorOfWords(sentence):
     V = sentence.split()
-    vectorOfWords = []
+    vectorOfWords = []    
     for v in V:
         Type = know.getType(v)
         if Type != None:
             vectorOfWords += Type.split()
         else:
-            vectorOfWords.append(v)
-    #print(vectorOfWords)
-    #print(getBigrams(vectorOfWords))
+            vectorOfWords.append(v)    
     return getBigrams(vectorOfWords)
 def getVectorOfWeight(sentence):
-    vectorOfWords = getVectorOfWords(sentence)
+    vectorOfWords = getVectorOfWords(sentence)    
     w = []
     for d in dictionary:
         if vectorOfWords.count(d) > 0:
             w.append(1)
         else:
-            w.append(0)
-    #print(w)
+            w.append(0)    
     return w
 
 def getTheSame(sentence):    
     w = getVectorOfWeight(sentence)  
-    category = clf.predict([w])[0]
-    print(category)
+    
+    if sum(w) == 0: return None
+
+    category = clf.predict([w])[0]    
     ##########################################
-    n = len(X)
-    #print(data_train)
-    L = [(cosine(w, X[i]), i) for i in limited_list[category]]
+    n = len(X)    
+    L = [(cosine(w, templates[i]), i) for i in limited_list[category]]
     L.sort(reverse=True)
     return L[ : 3]
 
@@ -103,7 +115,6 @@ def cosine(u, v):
 
 def getNames(sentence):
     vectorOfWords = sentence.split()
-    res = [v for v in vectorOfWords if know.getType(v) != None]
-    #print(res)
+    res = [v for v in vectorOfWords if know.getType(v) != None]    
     return res
 

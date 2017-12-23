@@ -1,107 +1,50 @@
-53
+49
 doan thang AB
-doan thang
 duong thang AB
-duong thang
 duong trung truc AB
-duong thang
 MN la duong trung binh tai dinh A cua tam giac ABC
-doan thang
 tam giac ABC
-tam giac
 tam giac ABC vuong tai A
-tam giac
 tam giac ABC can tai A
-tam giac
 tam giac ABC vuong can tai A
-tam giac
 tam giac ABC deu
-tam giac
 AM la trung tuyen cua tam giac ABC
-doan thang
-duong tron tam O ngoai tiep tam giac ABC
-duong tron
-AM la duong phan giac cua tam giac ABC
-doan thang
-qua A duong thang song song voi d
-duong thang
-qua A duong thang song song voi BC
-duong thang
-qua A duong thang vuong goc voi d
-duong thang
-qua A duong thang vuong goc voi BC
-duong thang
+duong tron (C) tam O ngoai tiep tam giac ABC
+AM la tia phan giac cua tam giac ABC
+qua A ve duong thang song song voi d
+qua A ve duong thang song song voi BC
+qua A ve duong thang vuong goc voi d
+qua A ve duong thang vuong goc voi BC
 goi M la trung diem cua AB
-diem
 cho diem M nam tren AB
-diem
 goi I la giao diem cua AB va CD
-diem
 diem A nam trong tam giac ABC
-diem
 diem A nam ngoai tam giac ABC
-diem
 tren d lay diem M
-diem
 AB va CD song song voi nhau
-doan thang
 AB va CD vuong goc voi nhau
-doan thang
 goi G la trong tam cua tam giac ABC
-diem
 AH la duong cao cua tam giac ABC
-doan thang
 goi H la truc tam cua tam giac ABC
-diem
 goi I la giao diem cua d va AB
-diem
 goi I la giao diem cua hai duong thang d va d1
-diem
 goi B la diem doi xung voi A qua BC
-diem
 goi B la diem doi xung voi A qua C
-diem
 tu giac ABCD
-tu giac
-duong cao
-doan thang
-tam giac can
-tam giac
-tam giac vuong
-tam giac
-tam giac vuong can
-tam giac
 tia Ox
-tia
 tia Oz nam giua hai tia Ox va Oy
-tia
-ve tia Ox doi voi tia Oz
-tia
+tia Ox doi voi Oz
 M la diem nam tren duong tron
-diem
 M la diem nam ngoai duong tron
-diem
 hinh thang ABCD
-tu giac
 hinh thang can ABCD
-tu giac
 hinh thang vuong ABCD
-tu giac
 hinh binh hanh ABCD
-tu giac
 hinh thoi ABCD
-tu giac
 hinh vuong ABCD
-tu giac
 hinh chu nhat ABCD
-tu giac
 tia Oz la tia phan giac cua tia Ox va Oy
-tia
 M la diem thuoc tia Ox
-diem
 M la giao diem cua hai tia Ox va Oy
-diem
 M la giao diem cua tia Ox va doan AB
-diem
 M la giao diem hai duong cheo cua tu giac ABCD
-diem

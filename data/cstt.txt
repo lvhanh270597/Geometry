@@ -1,9 +1,9 @@
-31
+49
 1
-doan thang
+ve doan thang
 doan thang
 1
-duong thang
+ve duong thang
 duong thang
 1
 duong trung truc
@@ -41,9 +41,11 @@ ve
 la duong trung tuyen cua tam giac
 doan thang
 tam giac
-2
-ve duong tron tam
+3
+ve duong tron
+tam
 ngoai tiep tam giac
+duong tron
 diem
 tam giac
 2
@@ -164,3 +166,83 @@ qua
 diem
 diem
 diem
+1
+ve tu giac
+tu giac
+1
+ve tia
+tia
+3
+ve tia
+nam giua hai tia
+va
+tia
+tia
+tia
+2
+ve tia
+doi voi tia
+tia
+tia
+2
+ve
+la diem thuoc duong tron
+diem
+duong tron
+2
+ve
+la diem ngoai duong tron
+diem
+duong tron
+1
+hinh thang
+tu giac
+1
+hinh thang can
+tu giac
+1
+hinh thang vuong
+tu giac
+1
+hinh binh hanh
+tu giac
+1
+hinh thoi
+tu giac
+1
+hinh vuong
+tu giac
+1
+hinh chu nhat
+tu giac
+3
+tia
+la tia phan giac cua hai tia
+va
+tia
+tia
+tia
+2
+ve
+la diem thuoc tia
+diem
+tia
+3
+goi
+la giao diem giua hai tia
+va
+diem
+tia
+tia
+3
+goi
+la giao diem giua tia
+va doan
+diem
+tia
+doan thang
+2
+goi
+la giao diem hai duong cheo cua tu giac
+diem
+tu giac

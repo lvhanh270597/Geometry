@@ -35,7 +35,25 @@ ListOfFunctions = [
 	fc.GiaoDiemDuongDoan,
 	fc.GiaoDiemHaiDuong,
 	fc.DoiXungQuaCanh,
-	fc.DoiXungQuaDiem
+	fc.DoiXungQuaDiem,
+	fc.TuGiac,
+	fc.Tia,
+	fc.TiaNamGiuaHaiTia,
+	fc.HaiTiaDoiNhau,
+	fc.ThuocDuongTron,
+	fc.NgoaiDuongTron,
+	fc.HinhThang,
+	fc.HinhThangCan,
+	fc.HinhThangVuong,
+	fc.HinhBinhHanh,
+	fc.HinhThoi,
+	fc.HinhVuong,
+	fc.HinhChuNhat,
+	fc.TiaPhanGiac,
+	fc.DiemThuocTia,
+	fc.GiaoDiemHaiTia,
+	fc.GiaoDiemTiaDoan,
+	fc.GiaoDiemHaiDuongCheoTuGiac
 ]
 
 
@@ -72,7 +90,7 @@ class ChatBot(object):
 		print("OK")
 
 		print("Đang tạo từ điển...", end=' ')
-		nlp.loadData('../data/data.txt')
+		nlp.loadData()
 		nlp.learnData()
 		print("OK")
 
@@ -95,7 +113,7 @@ class ChatBot(object):
 				print('Tôi chưa hiểu ý bạn. Xin thử lại với câu khác.')
 				continue
 			args = nlp.getNames(sentence)
-			found = False
+			found = -1
 			func = None
 			for index in L:
 				print('Có phải ý của bạn là: ', end =' ')
@@ -105,9 +123,9 @@ class ChatBot(object):
 				if not Enter():
 					continue
 				else:
-					found = True
+					found = index[1]
 					break
-			if not found:
+			if found == -1:
 				print('Tôi chưa hiểu ý bạn. Xin hãy tiếp tục...')
 				continue
 			# pass mind
@@ -120,27 +138,28 @@ class ChatBot(object):
 				again = True
 			if not again and typeOfargs != func.typeOfArgs:
 				print('Tham số bạn nhập chưa khớp!')
-				again = True
-			if again:
+				again = True			
+			if again:				
+				print('Ví dụ: ', nlp.sentences[found])
 				args = EnterInput(func.typeOfArgs).split()			
 				typeOfargs = [know.getType(a) for a in args]				
 
 				while typeOfargs != func.typeOfArgs:
 					print('Xin hãy thử lại...')
 					args = EnterInput(func.typeOfArgs).split()			
-					typeOfargs = [know.getType(a) for a in args]
+					typeOfargs = [know.getType(a) for a in args]					
 
 			# pass tham so
 			# Ve
 			func.func(args)
 
 
-def EnterInput(typeOfArgs):
+def EnterInput(typeOfArgs):	
 	print('Bạn cần nhập theo thứ tự:', end=' ')
 	for tys in typeOfArgs:
 		print(tys, end=', ')
 	print()
-	s = input('Ngăn cách nhau bởi dấu cách: ')
+	s = input('Ngăn cách nhau bởi dấu cách: ')	
 	return s
 
 
