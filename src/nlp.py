@@ -2,9 +2,14 @@
 import functions as fc
 import knowledge as know
 import math
+from sklearn.svm import LinearSVC
 
 dictionary = []
-data_train = []
+sentences = []
+X = []
+y = []
+limited_list = {}
+clf = None
 
 
 def getBigrams(v):
@@ -15,36 +20,40 @@ def getBigrams(v):
     return v
 
 def loadData(fpath):
-    global dictionary
     f = open(fpath)
     num = int(f.readline())
-    sentences = []
     for i in range(num):
         ###################################################
-        sentence = ''
-        n_des = int(f.readline())        
-        for j in range(n_des):
-            s = f.readline()
-            sentence += s[ : len(s) - 1] + ' ____ '
-        ###################################################     
-        for j in range(n_des):
-            s = f.readline()
-            sentence += s[ : len(s) - 1] + ' '                   
-        ###### Making dictionary ######
-        _v = getBigrams(sentence.split())
-        for u in _v:
+        sentence = f.readline()        
+        category = f.readline()
+        category = category[ : len(category) - 1]
+        sentence = sentence[ : len(sentence) - 1] 
+        v = getVectorOfWords(sentence)
+        for u in v:
             if u not in dictionary:
-                dictionary.append(u)        
-        ###################################################        
+                dictionary.append(u)  
+        sentence = ' '.join(v)
+        ###################################################     
+        if category not in limited_list.keys():
+            limited_list[category] = [i]
+        else:
+            limited_list[category].append(i)
         ###############################
         sentences.append(sentence)
+        y.append(category)
 
-    ################## Making data ####################
+
+    ################## Making data ###################    
+    dictionary.append('unknown')
     for sentence in sentences:        
-        data_train.append(getVectorOfWeight(sentence))
+        X.append(getVectorOfWeight(sentence))
+    print(dictionary)
+    print(limited_list)
 
-    #print(dictionary)
-
+def learnData():
+    global clf
+    clf = LinearSVC(random_state=0)
+    clf.fit(X, y)
 
 def getVectorOfWords(sentence):
     V = sentence.split()
@@ -71,12 +80,12 @@ def getVectorOfWeight(sentence):
 
 def getTheSame(sentence):    
     w = getVectorOfWeight(sentence)  
-    # khong tim thay
-    if sum(w) == 0: return None  
-    ##############
-    n = len(data_train)
+    category = clf.predict([w])[0]
+    print(category)
+    ##########################################
+    n = len(X)
     #print(data_train)
-    L = [(cosine(w, data_train[i]), i) for i in range(n)]
+    L = [(cosine(w, X[i]), i) for i in limited_list[category]]
     L.sort(reverse=True)
     return L[ : 3]
 

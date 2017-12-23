@@ -58,12 +58,11 @@ def Doan(L, show=1):
     return seg
 
 def Duong(L, show=1):
-    dAB = L[0]
-    AB = dAB[1 :]
+    AB = L[0]
     doanAB = Doan([AB], show = 0)
     duongAB = line.convertSegment([doanAB])
     if show == 1: duongAB.draw()
-    value[dAB] = duongAB
+    value[AB] = duongAB
     return duongAB
 
 def DuongTrungTruc(L):

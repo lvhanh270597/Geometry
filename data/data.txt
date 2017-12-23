@@ -1,0 +1,63 @@
+31
+ve doan thang AB
+doan thang
+ve duong thang AB
+duong thang
+ve duong trung truc cua doan thang AB
+duong thang
+ve MN la duong trung binh tai dinh A cua tam giac ABC
+doan thang
+ve tam giac ABC
+tam giac
+ve tam giac ABC vuong tai A
+tam giac
+ve tam giac ABC can tai A
+tam giac
+ve tam giac ABC vuong can tai A
+tam giac
+ve tam giac ABC deu
+tam giac
+AM la duong trung tuyen cua tam giac ABC
+doan thang
+ve duong tron tam O ngoai tiep tam giac ABC
+duong tron
+AM la tia phan giac cua tam giac ABC
+doan thang
+qua A ve duong thang song song voi d
+duong thang
+qua A ve duong thang song song voi BC
+duong thang
+qua A ve duong thang vuong goc voi d
+duong thang
+qua A ve duong thang vuong goc voi BC
+duong thang
+goi M la trung diem cua AB
+diem
+cho diem M nam tren AB
+diem
+goi I la giao diem cua AB va CD
+diem
+ve diem A nam trong tam giac ABC
+diem
+ve diem A nam ngoai tam giac ABC
+diem
+tren d lay diem M
+diem
+ve AB va CD song song voi nhau
+doan thang
+ve AB va CD vuong goc voi nhau
+doan thang
+goi G la trong tam cua tam giac ABC
+diem
+AH la duong cao cua tam giac ABC
+doan thang
+goi H la truc tam cua tam giac ABC
+diem
+goi I la giao diem cua d va AB
+diem
+goi I la giao diem cua hai duong thang d va d1
+diem
+goi B la diem doi xung voi A qua BC
+diem
+goi B la diem doi xung voi A qua C
+diem

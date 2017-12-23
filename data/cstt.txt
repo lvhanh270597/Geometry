@@ -1,4 +1,4 @@
-30
+31
 1
 doan thang
 doan thang
@@ -19,12 +19,12 @@ diem
 ve tam giac
 tam giac
 2
-tam giac vuong
+tam giac
 vuong tai
 tam giac
 diem
 2
-tam giac can
+tam giac
 can tai
 tam giac
 diem

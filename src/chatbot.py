@@ -72,7 +72,8 @@ class ChatBot(object):
 		print("OK")
 
 		print("Đang tạo từ điển...", end=' ')
-		nlp.loadData('../data/cstt.txt')
+		nlp.loadData('../data/data.txt')
+		nlp.learnData()
 		print("OK")
 
 

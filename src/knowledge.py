@@ -29,8 +29,7 @@ def getType(x):
 		if x.isupper():
 			return typeOfObjects[1]
 		else:
-			if x.startswith('d'):
-                                return typeOfObjects[2]
+			if x.startswith('d') and x[1].isnumeric(): return typeOfObjects[2]
 	if len(x) == 3:
 		if x.isupper():
 			return typeOfObjects[3]
