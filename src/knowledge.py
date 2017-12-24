@@ -23,16 +23,14 @@ class Function(object):
 
 		############################################################################
 		if len(new_args) != len(self.typeOfArgs):
-			ListOfArguments = []
-
-		for i in range(self.num - len(ListOfArguments)):
-			ListOfArguments.append('___')
+			new_args = ['____'] * self.num
+		
 		res = ''
 		for i in range(self.num):
 			res += self.des[i] \
-                               + ' ' + str(ListOfArguments[i]) + ' '
+                               + ' ' + str(new_args[i]) + ' '
 		print(res)
-		return res
+		return new_args
 
 def getType(x):	
 	if len(x) == 1:

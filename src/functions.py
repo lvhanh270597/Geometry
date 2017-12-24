@@ -334,8 +334,6 @@ def DuongTron(OR):
     Var = V()
     O = OR[0]
     R = OR[1]
-    print(R)
-    print(O)
     pO = None
     if O not in Var:
         pO = point.rand()
@@ -488,7 +486,6 @@ def QuaMotDiemVuongGocVoiDoan(L, show=1):
     Var = V()
     (P, L1, S) = L
     if P not in Var: return       
-    print(S)
     if S not in Var: value[S] = Doan([S])
     
     d2 = line.convertSegment([value[S]])

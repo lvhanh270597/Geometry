@@ -118,7 +118,7 @@ class ChatBot(object):
 			for index in L:
 				print('Có phải ý của bạn là: ', end =' ')
 				func = self.knowl.funcs[index[1]]
-				func.getDescription(args)
+				args = func.getDescription(args)
 				
 				if not Enter():
 					continue

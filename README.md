@@ -30,3 +30,13 @@ Cấu tạo bởi 2 thành phần là 2 điểm đầu mút của nó
 
 ### Circle
 Cấu tạo bởi 2 thành phần là tọa độ tâm và bán kính
+
+## Cài đặt
+Để sử dụng được chương trình này, bạn cần cài đặt:
+* Python 3
+* Package graphics.py của Python: pip install graphics.py
+* Thư viện skicit-learn của Python: pip install sklearn.
+
+## Sử dụng:
+* Nếu bạn dùng hệ điều hành Windows, hãy chạy file run.bat
+* Hoặc có thể Linux hoặc MacOS bạn có thể chạy file run.sh
